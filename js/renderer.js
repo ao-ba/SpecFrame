@@ -151,7 +151,7 @@ class FrameRenderer {
 
     const fontBase = this.getFontFamily(options.fontFamily);
     const textColor = options.textColor || '#111827';
-    const subtextColor = this.getMutedColor(textColor, 0.65);
+    const subtextColor = this.getMutedColor(textColor, 0.78);
 
     // Left block: Brand logo + Camera model + Lens
     const centerY = barY + barH * 0.5;
@@ -331,7 +331,7 @@ class FrameRenderer {
 
       // Top label
       ctx.font = labelFont;
-      ctx.fillStyle = accentColor;
+      ctx.fillStyle = this.getMutedColor(textColor, 0.8);
       ctx.textAlign = 'center';
       ctx.fillText(b.label, boxX + boxW / 2, boxY + Math.round(11 * scale * fontScale));
 
@@ -530,7 +530,7 @@ class FrameRenderer {
     }
     if (specs.length > 0) {
       ctx.textAlign = 'right';
-      ctx.fillStyle = accentColor;
+      ctx.fillStyle = textColor;
       ctx.fillText(specs.join('   '), totalW - padX, botCenterY);
     }
 
@@ -580,12 +580,12 @@ class FrameRenderer {
 
     // Film Stamp texts in amber/gold color
     const fontScale = options.fontSizeScale !== undefined ? options.fontSizeScale : 1.3;
-    const amber = '#F59E0B';
+    const textColor = options.textColor || '#F59E0B';
     const fontBase = this.getFontFamily('mono');
     const fontSize = Math.round(14 * scale * fontScale);
 
     ctx.font = `700 ${fontSize}px ${fontBase}`;
-    ctx.fillStyle = amber;
+    ctx.fillStyle = textColor;
     ctx.textBaseline = 'middle';
 
     // Top text: Film brand & ISO
@@ -682,7 +682,7 @@ class FrameRenderer {
     let textStartX = cardX + padX;
     if (options.items.logo) {
       const logoBrand = this.resolveBrand(metadata, options.brandLogo);
-      this.drawBrandLogo(ctx, logoBrand, textStartX + logoSize / 2, cardY + cardH / 2, logoSize, '#FFFFFF', accentColor);
+      this.drawBrandLogo(ctx, logoBrand, textStartX + logoSize / 2, cardY + cardH / 2, logoSize, textColor, accentColor);
       textStartX += logoSize + Math.round(14 * scale);
     }
 
@@ -694,7 +694,7 @@ class FrameRenderer {
     ctx.fillText(titleLine, textStartX, cardY + padY + titleSize * 0.45);
 
     ctx.font = `500 ${specSize}px ${fontBase}`;
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.75)';
+    ctx.fillStyle = this.getMutedColor(textColor, 0.82);
     ctx.fillText(specsLine, textStartX, cardY + cardH - padY - specSize * 0.45);
 
     return this.canvas;
@@ -749,7 +749,7 @@ class FrameRenderer {
 
     if (specsLine) {
       ctx.font = `500 ${specSize}px ${fontBase}`;
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
+      ctx.fillStyle = this.getMutedColor(textColor, 0.85);
       ctx.fillText(specsLine, croppedW - margin, croppedH - margin);
     }
 
@@ -777,7 +777,7 @@ class FrameRenderer {
     this.drawPhotoWithCorners(ctx, image, targetCrop, 0, 0, croppedW, croppedH, { cornerRadius: 0 });
 
     const fontBase = "'VT323', 'Courier New', monospace";
-    const amber = options.accentColor || '#FFA100';
+    const stampColor = options.textColor && options.textColor !== '#FFFFFF' ? options.textColor : (options.accentColor || '#FFA100');
     const margin = Math.round(croppedW * 0.04);
 
     // Format quartz date stamp: '24 10 18
@@ -803,7 +803,7 @@ class FrameRenderer {
     ctx.shadowColor = 'rgba(255, 140, 0, 0.75)';
     ctx.shadowBlur = Math.round(10 * scale);
     ctx.font = `700 ${fontSize}px ${fontBase}`;
-    ctx.fillStyle = amber;
+    ctx.fillStyle = stampColor;
     ctx.textAlign = 'right';
     ctx.textBaseline = 'bottom';
     ctx.fillText(stampLine, croppedW - margin, croppedH - margin);
