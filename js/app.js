@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
       textColor: '#111827',
       accentColor: '#E02424',
       fontFamily: 'sans',
+      fontSizeScale: 1.0,
       borderScale: 1.0,
       bottomBarScale: 1.0,
       cornerRadius: 0,
@@ -80,6 +81,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const bottomBarScaleVal = document.getElementById('bottom-bar-scale-val');
   const cornerRadiusInput = document.getElementById('corner-radius-input');
   const cornerRadiusVal = document.getElementById('corner-radius-val');
+  const fontSizeScaleInput = document.getElementById('font-size-scale-input');
+  const fontSizeScaleVal = document.getElementById('font-size-scale-val');
+  const resetStyleBtn = document.getElementById('reset-style-btn');
+  const dragOverlay = document.getElementById('drag-overlay');
   const frameColorPicker = document.getElementById('frame-color-picker');
   const textColorPicker = document.getElementById('text-color-picker');
   const accentColorPicker = document.getElementById('accent-color-picker');
@@ -324,6 +329,38 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Global Drag & Drop replacement anywhere on the window
+  let dragCounter = 0;
+  ['dragenter', 'dragover', 'dragleave', 'drop'].forEach((eventName) => {
+    window.addEventListener(eventName, (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+    }, false);
+  });
+
+  window.addEventListener('dragenter', (e) => {
+    if (e.dataTransfer && e.dataTransfer.types && (e.dataTransfer.types.includes('Files') || e.dataTransfer.types.includes('public.file-url'))) {
+      dragCounter++;
+      if (dragOverlay) dragOverlay.classList.add('visible');
+    }
+  });
+
+  window.addEventListener('dragleave', (e) => {
+    dragCounter--;
+    if (dragCounter <= 0) {
+      dragCounter = 0;
+      if (dragOverlay) dragOverlay.classList.remove('visible');
+    }
+  });
+
+  window.addEventListener('drop', (e) => {
+    dragCounter = 0;
+    if (dragOverlay) dragOverlay.classList.remove('visible');
+    if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      handleFile(e.dataTransfer.files[0]);
+    }
+  });
+
   if (fileInput) {
     fileInput.addEventListener('change', (e) => {
       if (e.target.files.length > 0) {
@@ -398,6 +435,37 @@ document.addEventListener('DOMContentLoaded', () => {
       const val = parseInt(e.target.value, 10);
       state.options.cornerRadius = val;
       if (cornerRadiusVal) cornerRadiusVal.textContent = `${val}px`;
+      renderCanvas();
+    });
+  }
+
+  if (fontSizeScaleInput) {
+    fontSizeScaleInput.addEventListener('input', (e) => {
+      const val = parseFloat(e.target.value);
+      state.options.fontSizeScale = val;
+      if (fontSizeScaleVal) fontSizeScaleVal.textContent = `${Math.round(val * 100)}%`;
+      renderCanvas();
+    });
+  }
+
+  // Reset Style Button
+  if (resetStyleBtn) {
+    resetStyleBtn.addEventListener('click', () => {
+      state.options.borderScale = 1.0;
+      state.options.bottomBarScale = 1.0;
+      state.options.cornerRadius = 0;
+      state.options.fontSizeScale = 1.0;
+      state.options.aspectRatio = 'original';
+      state.options.brandLogo = 'auto';
+
+      if (borderScaleInput) { borderScaleInput.value = 1.0; borderScaleVal.textContent = '100%'; }
+      if (bottomBarScaleInput) { bottomBarScaleInput.value = 1.0; bottomBarScaleVal.textContent = '100%'; }
+      if (cornerRadiusInput) { cornerRadiusInput.value = 0; cornerRadiusVal.textContent = '0px'; }
+      if (fontSizeScaleInput) { fontSizeScaleInput.value = 1.0; fontSizeScaleVal.textContent = '100%'; }
+      if (aspectRatioSelect) aspectRatioSelect.value = 'original';
+      if (brandLogoSelect) brandLogoSelect.value = 'auto';
+
+      applyPresetStyles(state.options.preset);
       renderCanvas();
     });
   }

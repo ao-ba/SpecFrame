@@ -69,6 +69,17 @@
     <!-- Hidden File Input -->
     <input type="file" id="file-input" accept="image/jpeg,image/png,image/webp,image/heic,image/tiff" style="display: none;">
 
+    <!-- Drag & Drop Fullscreen Overlay -->
+    <div id="drag-overlay" class="drag-overlay">
+      <div class="drag-overlay-card">
+        <div class="drag-overlay-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        </div>
+        <span class="drag-overlay-title">新しい写真をドロップ</span>
+        <span class="drag-overlay-desc">ここにドロップすると即座に画像とExifが置き換わります</span>
+      </div>
+    </div>
+
     <!-- Initial Empty Upload State (visible when no image loaded) -->
     <div id="empty-state" class="empty-state hidden">
       <div id="drop-zone" class="drop-card">
@@ -261,6 +272,14 @@
 
           <!-- Tab 2: Style & Frame Customization -->
           <div id="tab-style" class="tab-pane" role="tabpanel">
+            <!-- Reset style button row -->
+            <div style="margin-bottom: 14px; display: flex; justify-content: flex-end;">
+              <button type="button" id="reset-style-btn" class="btn btn-sm" title="現在のスタイルを初期状態に戻す">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                スタイルをデフォルトに戻す
+              </button>
+            </div>
+
             <!-- Auto extracted color palette -->
             <div class="control-group">
               <span class="control-label">写真から抽出した調和パレット</span>
@@ -328,6 +347,15 @@
                 <span id="corner-radius-val" class="control-val">0px</span>
               </div>
               <input type="range" id="corner-radius-input" min="0" max="60" step="2" value="0">
+            </div>
+
+            <!-- Font Size Scale Slider -->
+            <div class="control-group">
+              <div class="control-label">
+                <span>文字サイズ (フォント倍率)</span>
+                <span id="font-size-scale-val" class="control-val">100%</span>
+              </div>
+              <input type="range" id="font-size-scale-input" min="0.6" max="1.8" step="0.05" value="1.0">
             </div>
 
             <!-- Aspect Ratio -->

@@ -22,6 +22,7 @@ class FrameRenderer {
       textColor = '#111827',
       accentColor = '#E02424',
       fontFamily = 'sans',
+      fontSizeScale = 1.0,
       borderScale = 1.0,
       bottomBarScale = 1.0,
       cornerRadius = 0,
@@ -147,15 +148,16 @@ class FrameRenderer {
     const centerY = barY + barH * 0.5;
     let leftCursor = photoX + paddingX;
 
+    const fontScale = options.fontSizeScale || 1.0;
+    const logoSize = Math.round(28 * scale * Math.min(1.4, Math.max(0.7, fontScale)));
     if (options.items.logo) {
       const logoBrand = this.resolveBrand(metadata, options.brandLogo);
-      const logoSize = Math.round(28 * scale);
       this.drawBrandLogo(ctx, logoBrand, leftCursor, centerY, logoSize, textColor, options.accentColor);
       leftCursor += logoSize + Math.round(16 * scale);
     }
 
-    const titleSize = Math.round(22 * scale);
-    const subtitleSize = Math.round(15 * scale);
+    const titleSize = Math.round(22 * scale * fontScale);
+    const subtitleSize = Math.round(15 * scale * fontScale);
 
     if (options.items.camera || options.items.lens) {
       ctx.textAlign = 'left';
@@ -261,16 +263,17 @@ class FrameRenderer {
     ctx.textAlign = 'left';
     ctx.textBaseline = 'middle';
 
+    const fontScale = options.fontSizeScale || 1.0;
     let leftX = photoX + paddingX;
     if (options.items.logo) {
       const logoBrand = this.resolveBrand(metadata, options.brandLogo);
-      const logoSize = Math.round(26 * scale);
+      const logoSize = Math.round(26 * scale * Math.min(1.4, Math.max(0.7, fontScale)));
       this.drawBrandLogo(ctx, logoBrand, leftX, centerY, logoSize, textColor, accentColor);
       leftX += logoSize + Math.round(14 * scale);
     }
 
-    const titleSize = Math.round(20 * scale);
-    const subSize = Math.round(13 * scale);
+    const titleSize = Math.round(20 * scale * fontScale);
+    const subSize = Math.round(13 * scale * fontScale);
 
     const modelName = options.items.camera ? (metadata.model || metadata.make || 'CAMERA') : '';
     const lensName = options.items.lens ? (metadata.lens || '') : '';
@@ -297,9 +300,8 @@ class FrameRenderer {
 
     let rightX = photoX + croppedW - paddingX;
     const badgePadX = Math.round(12 * scale);
-    const badgePadY = Math.round(6 * scale);
-    const badgeFont = `600 ${Math.round(15 * scale)}px ${fontBase}`;
-    const labelFont = `500 ${Math.round(9 * scale)}px ${fontBase}`;
+    const badgeFont = `600 ${Math.round(15 * scale * fontScale)}px ${fontBase}`;
+    const labelFont = `500 ${Math.round(9 * scale * fontScale)}px ${fontBase}`;
 
     // Draw badges from right to left
     badges.reverse().forEach((b) => {
@@ -308,7 +310,7 @@ class FrameRenderer {
       ctx.font = labelFont;
       const labelWidth = ctx.measureText(b.label).width;
       const boxW = Math.max(valWidth, labelWidth) + badgePadX * 2;
-      const boxH = Math.round(38 * scale);
+      const boxH = Math.round(38 * scale * Math.max(0.85, fontScale));
       const boxX = rightX - boxW;
       const boxY = centerY - boxH / 2;
 
@@ -322,12 +324,12 @@ class FrameRenderer {
       ctx.font = labelFont;
       ctx.fillStyle = accentColor;
       ctx.textAlign = 'center';
-      ctx.fillText(b.label, boxX + boxW / 2, boxY + Math.round(11 * scale));
+      ctx.fillText(b.label, boxX + boxW / 2, boxY + Math.round(11 * scale * fontScale));
 
       // Value
       ctx.font = badgeFont;
       ctx.fillStyle = textColor;
-      ctx.fillText(b.val, boxX + boxW / 2, boxY + Math.round(26 * scale));
+      ctx.fillText(b.val, boxX + boxW / 2, boxY + Math.round(26 * scale * fontScale));
 
       rightX -= boxW + Math.round(10 * scale);
     });
@@ -377,8 +379,9 @@ class FrameRenderer {
     if (options.items.date && metadata.date) parts.push(metadata.date);
     if (options.items.author && metadata.author) parts.push(metadata.author);
 
+    const fontScale = options.fontSizeScale || 1.0;
     const fullText = parts.join('   ·   ');
-    const fontSize = Math.round(16 * scale);
+    const fontSize = Math.round(16 * scale * fontScale);
 
     ctx.font = `400 ${fontSize}px ${fontBase}`;
     ctx.fillStyle = textColor;
@@ -432,8 +435,9 @@ class FrameRenderer {
     }
     if (options.items.date && metadata.date) specs.push(metadata.date);
 
-    const titleSize = Math.round(30 * scale);
-    const specSize = Math.round(16 * scale);
+    const fontScale = options.fontSizeScale || 1.0;
+    const titleSize = Math.round(30 * scale * fontScale);
+    const specSize = Math.round(16 * scale * fontScale);
 
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
@@ -480,9 +484,10 @@ class FrameRenderer {
     const fontBase = this.getFontFamily('mono');
     const padX = Math.round(croppedW * 0.04);
 
+    const fontScale = options.fontSizeScale || 1.0;
     const topCenterY = barH / 2;
     const botCenterY = totalH - barH / 2;
-    const fontSize = Math.round(14 * scale);
+    const fontSize = Math.round(14 * scale * fontScale);
 
     // Top Bar: Date / Title
     ctx.font = `500 ${fontSize}px ${fontBase}`;
@@ -565,9 +570,10 @@ class FrameRenderer {
     this.drawPhotoWithCorners(ctx, image, targetCrop, photoX, photoY, croppedW, croppedH, options);
 
     // Film Stamp texts in amber/gold color
+    const fontScale = options.fontSizeScale || 1.0;
     const amber = '#F59E0B';
     const fontBase = this.getFontFamily('mono');
-    const fontSize = Math.round(14 * scale);
+    const fontSize = Math.round(14 * scale * fontScale);
 
     ctx.font = `700 ${fontSize}px ${fontBase}`;
     ctx.fillStyle = amber;
@@ -626,8 +632,9 @@ class FrameRenderer {
     const titleLine = titleParts.join('  ·  ') || 'SpecFrame';
     const specsLine = specParts.join('   ');
 
-    const titleSize = Math.round(18 * scale);
-    const specSize = Math.round(14 * scale);
+    const fontScale = options.fontSizeScale || 1.0;
+    const titleSize = Math.round(18 * scale * fontScale);
+    const specSize = Math.round(14 * scale * fontScale);
 
     ctx.font = `600 ${titleSize}px ${fontBase}`;
     const titleW = ctx.measureText(titleLine).width;
@@ -635,7 +642,7 @@ class FrameRenderer {
     const specsW = ctx.measureText(specsLine).width;
 
     const contentW = Math.max(titleW, specsW);
-    const logoSize = options.items.logo ? Math.round(24 * scale) : 0;
+    const logoSize = options.items.logo ? Math.round(24 * scale * Math.min(1.4, Math.max(0.7, fontScale))) : 0;
     const padX = Math.round(20 * scale);
     const padY = Math.round(14 * scale);
 
@@ -718,8 +725,9 @@ class FrameRenderer {
     const titleLine = titleParts.join('  ·  ');
     const specsLine = specParts.join('   ');
 
-    const titleSize = Math.round(22 * scale);
-    const specSize = Math.round(16 * scale);
+    const fontScale = options.fontSizeScale || 1.0;
+    const titleSize = Math.round(22 * scale * fontScale);
+    const specSize = Math.round(16 * scale * fontScale);
 
     ctx.save();
     ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
@@ -777,8 +785,9 @@ class FrameRenderer {
     if (metadata.shutterSpeed) specs.push(metadata.shutterSpeed.replace('s', ''));
     if (metadata.iso) specs.push(metadata.iso);
 
+    const fontScale = options.fontSizeScale || 1.0;
     const stampLine = `${dateStr}   ${specs.join(' ')}`;
-    const fontSize = Math.round(36 * scale);
+    const fontSize = Math.round(36 * scale * fontScale);
 
     ctx.save();
     // Glowing amber stamp

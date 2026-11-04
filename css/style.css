@@ -94,6 +94,7 @@ body {
   letter-spacing: -0.02em;
   background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
@@ -650,6 +651,7 @@ body {
 
 input[type="color"] {
   -webkit-appearance: none;
+  appearance: none;
   border: none;
   width: 34px;
   height: 34px;
@@ -670,6 +672,7 @@ input[type="color"]::-webkit-color-swatch {
 /* Range Slider */
 input[type="range"] {
   -webkit-appearance: none;
+  appearance: none;
   width: 100%;
   height: 6px;
   border-radius: 3px;
@@ -777,27 +780,264 @@ input[type="range"]::-webkit-slider-thumb:hover {
   line-height: 1.5;
 }
 
-/* Responsive */
-@media (max-width: 960px) {
-  .app-main {
-    flex-direction: column;
-    overflow-y: auto;
+/* Drag & Drop Active Overlay */
+.drag-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 11, 14, 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-fast);
+}
+
+.drag-overlay.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.drag-overlay-card {
+  border: 2px dashed var(--accent-red);
+  background: rgba(22, 26, 36, 0.95);
+  padding: 40px 48px;
+  border-radius: var(--radius-xl);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  text-align: center;
+  box-shadow: 0 0 48px rgba(255, 77, 46, 0.35);
+  animation: pulseCard 2s infinite ease-in-out;
+  max-width: 90vw;
+}
+
+.drag-overlay-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(255, 77, 46, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-red);
+}
+
+.drag-overlay-icon svg {
+  width: 32px;
+  height: 32px;
+}
+
+.drag-overlay-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.drag-overlay-desc {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+}
+
+@keyframes pulseCard {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+}
+
+/* Responsive Overhaul for Mobile */
+@media (max-width: 900px) {
+  .app-header {
+    height: 52px;
+    padding: 0 12px;
   }
-  .workspace {
-    flex-direction: column;
-    height: auto;
+  .brand-title {
+    font-size: 1.05rem;
   }
-  .preview-stage {
-    min-height: 55vh;
-    border-right: none;
-    border-bottom: 1px solid var(--border-subtle);
+  .brand-badge {
+    display: none;
   }
-  .control-dock {
-    width: 100%;
-    min-width: auto;
-    height: auto;
+  .header-actions {
+    gap: 6px;
+  }
+  .sample-pills {
+    gap: 4px;
   }
   .sample-pills span {
     display: none;
   }
+  .sample-pills .btn {
+    font-size: 0.72rem;
+    padding: 4px 8px;
+    border-radius: 999px;
+  }
+  #pwa-install-btn {
+    font-size: 0.72rem;
+    padding: 4px 8px;
+  }
+
+  .app-main {
+    flex-direction: column;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .workspace {
+    flex-direction: column;
+    height: auto;
+    min-height: calc(100vh - 52px);
+    width: 100%;
+  }
+
+  .preview-stage {
+    flex: none;
+    width: 100%;
+    min-height: auto;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--border-subtle);
+    background: #07080a;
+  }
+
+  .stage-toolbar {
+    height: 38px;
+    padding: 0 12px;
+    font-size: 0.75rem;
+  }
+
+  .badge-res {
+    font-size: 0.7rem;
+    padding: 2px 6px;
+  }
+
+  .canvas-viewport {
+    padding: 10px;
+    height: 36vh;
+    min-height: 200px;
+    max-height: 280px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .canvas-shadow-wrapper {
+    max-width: 100%;
+    max-height: 100%;
+  }
+
+  #preview-canvas {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+  }
+
+  /* Fixed Bottom Action Dock on Mobile */
+  .stage-bottombar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: auto;
+    padding: 10px 14px;
+    padding-bottom: max(10px, env(safe-area-inset-bottom, 10px));
+    background: rgba(14, 16, 23, 0.96);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 -6px 24px rgba(0, 0, 0, 0.6);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .stage-bottombar > span {
+    display: none; /* Hide preview hint text on mobile */
+  }
+
+  .stage-bottombar-actions {
+    width: 100%;
+    display: flex;
+    gap: 10px;
+  }
+
+  .stage-bottombar-actions .btn {
+    flex: 1;
+    padding: 11px 12px;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+
+  .stage-bottombar-actions .btn-primary {
+    flex: 1.6;
+  }
+
+  /* Control Dock */
+  .control-dock {
+    width: 100%;
+    min-width: 100%;
+    border-left: none;
+    height: auto;
+  }
+
+  .tabs-nav {
+    position: sticky;
+    top: 52px;
+    z-index: 20;
+    background: #12141c;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .tab-btn {
+    padding: 11px 4px;
+    font-size: 0.76rem;
+    gap: 4px;
+  }
+
+  .tabs-content {
+    padding: 16px 14px 96px 14px; /* extra 96px for fixed bottom bar */
+    overflow-y: visible;
+    height: auto;
+  }
+
+  .presets-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
 }
+
+@media (max-width: 420px) {
+  .app-header {
+    padding: 0 8px;
+  }
+  .brand-logo-img {
+    width: 28px;
+    height: 28px;
+  }
+  .brand-title {
+    font-size: 0.95rem;
+  }
+  .sample-pills .btn {
+    font-size: 0.68rem;
+    padding: 3px 6px;
+  }
+  .tab-btn {
+    font-size: 0.72rem;
+  }
+  .tab-btn svg {
+    display: none; /* save space on ultra-narrow phones */
+  }
+  .presets-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  .preset-card {
+    padding: 8px;
+  }
+}
+
