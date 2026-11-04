@@ -1,0 +1,29 @@
+{
+  "name": "specframe",
+  "version": "1.0.0",
+  "description": "写真のExifメタデータを読み取って美しいフレームやオーバーレイを付与するPWA Webアプリ",
+  "main": "index.html",
+  "scripts": {
+    "start": "python3 -m http.server 8080",
+    "serve": "python3 -m http.server 8080",
+    "inject-exif": "node scripts/inject_sample_exif.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ao-ba/SpecFrame.git"
+  },
+  "keywords": [
+    "exif",
+    "photography",
+    "camera-frame",
+    "leica-look",
+    "pwa",
+    "github-pages"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "exifr": "^7.1.3",
+    "piexifjs": "^1.0.6"
+  }
+}

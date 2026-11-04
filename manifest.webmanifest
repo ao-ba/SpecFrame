@@ -1,0 +1,26 @@
+{
+  "name": "SpecFrame - 写真Exifフレーム＆メタデータ表示",
+  "short_name": "SpecFrame",
+  "description": "写真のExif情報（ISO・絞り・シャッタースピード等）を読み取り、美しい展示フレームやオーバーレイを付与して保存できるWebアプリ",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0b0c0e",
+  "theme_color": "#121316",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-512.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any"
+    }
+  ],
+  "categories": ["photo", "utilities", "productivity"]
+}
