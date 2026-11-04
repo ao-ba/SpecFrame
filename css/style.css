@@ -374,7 +374,7 @@ body {
 /* Floating Zoom & Reset Controller */
 .preview-zoom-bar {
   position: absolute;
-  bottom: 16px;
+  top: 16px;
   right: 16px;
   display: flex;
   align-items: center;
@@ -1211,7 +1211,8 @@ input[type="range"]::-webkit-slider-thumb:hover {
   }
 
   .preview-zoom-bar {
-    bottom: 8px;
+    top: 8px;
+    bottom: auto;
     right: 8px;
     padding: 2px 3px;
     gap: 2px;
