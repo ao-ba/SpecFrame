@@ -28,7 +28,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&family=Playfair+Display:ital,wght@0,600;1,700&family=VT323&display=swap" rel="stylesheet">
 
   <!-- App Stylesheet -->
-  <link rel="stylesheet" href="./css/style.css?v=1.4.1">
+  <link rel="stylesheet" href="./css/style.css?v=1.4.2">
 </head>
 <body>
   <!-- App Header -->
@@ -53,8 +53,8 @@
 
       <!-- PWA Install Button (shown when available) -->
       <button type="button" id="pwa-install-btn" class="btn btn-sm" style="display: none;" title="アプリを端末にインストール">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        PWAインストール
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        <span>インストール</span>
       </button>
 
       <!-- GitHub Link -->
@@ -100,7 +100,7 @@
         </div>
 
         <div class="empty-state-footer">
-          <span class="app-version-badge">SpecFrame v1.4.1</span>
+          <span class="app-version-badge">SpecFrame v1.4.2</span>
           <span class="footer-divider">•</span>
           <button type="button" class="btn-refresh-cache" title="キャッシュを消去して最新版を取得">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
@@ -136,30 +136,17 @@
             <span style="font-size: 0.8rem; color: var(--text-muted);">
               💡 リアルタイムプレビュー中（ネイティブ高解像度書き出し対応）
             </span>
-            <span class="app-version-badge">v1.4.1</span>
-            <button type="button" class="btn-refresh-cache" title="キャッシュを消去して最新バージョンを再読み込み">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
-              最新版に更新
-            </button>
+            <span class="app-version-badge">v1.4.2</span>
           </div>
 
           <div class="stage-bottombar-actions">
             <button type="button" id="copy-btn" class="btn btn-sm" title="クリップボードへコピー">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-              クリップボードへコピー
+              <span>クリップボード<span class="desktop-only-inline">へコピー</span></span>
             </button>
             <button type="button" id="download-btn" class="btn btn-sm btn-primary" title="画像を保存 (Ctrl+S)">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-              画像を保存
-            </button>
-          </div>
-
-          <div class="mobile-footer-bar">
-            <span class="app-version-badge">SpecFrame v1.4.1</span>
-            <span class="footer-divider">•</span>
-            <button type="button" class="btn-refresh-cache mobile-btn-refresh" title="キャッシュを削除して最新版を取得">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
-              キャッシュ削除・最新版に更新
+              <span>画像を保存</span>
             </button>
           </div>
         </div>
@@ -184,6 +171,10 @@
           <button type="button" class="tab-btn" data-tab="tab-export" role="tab" aria-selected="false">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             書き出し
+          </button>
+          <button type="button" class="tab-btn" data-tab="tab-other" role="tab" aria-selected="false">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
+            その他
           </button>
         </nav>
 
@@ -557,21 +548,72 @@
                 クリップボードへコピー
               </button>
             </div>
+          </div>
 
-            <!-- App Version & Cache Clear Card -->
-            <div class="app-info-card">
-              <div class="app-info-row">
-                <span class="app-info-label">バージョン:</span>
-                <span class="app-version-badge">SpecFrame v1.4.1</span>
+          <!-- Tab 5: Other & About -->
+          <div id="tab-other" class="tab-pane" role="tabpanel">
+            <div class="control-group">
+              <span class="control-label">バージョン＆キャッシュ管理</span>
+              
+              <!-- Version & Update Card -->
+              <div class="other-section-card">
+                <div class="other-card-header">
+                  <div>
+                    <span class="other-app-title">SpecFrame</span>
+                    <span class="app-version-badge">v1.4.2</span>
+                  </div>
+                  <span class="status-indicator">● 最新版稼働中</span>
+                </div>
+                <p class="other-card-desc">
+                  Android や PWA で最新バージョンが反映されない場合は、下のボタンを押してください。キャッシュを消去して最新バージョンを読み直します。
+                </p>
+                <button type="button" class="btn btn-primary btn-refresh-cache" style="width: 100%; padding: 12px; font-weight: 600; justify-content: center; margin-top: 4px;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+                  キャッシュを削除して最新版に更新
+                </button>
               </div>
-              <div class="app-info-row">
-                <span class="app-info-label">PWAオフライン:</span>
-                <span class="status-indicator">● 対応済み</span>
+            </div>
+
+            <div class="control-group">
+              <span class="control-label">PWA・オフライン機能</span>
+              <div class="other-section-card">
+                <div class="other-info-item">
+                  <span class="other-info-key">PWAオフライン対応</span>
+                  <span class="status-indicator">● 対応済み（ネット接続なしでも動作）</span>
+                </div>
+                <div class="other-info-item">
+                  <span class="other-info-key">プライバシー保護</span>
+                  <span style="font-size: 0.78rem; color: var(--text-secondary);">100% ブラウザ内完結（外部サーバーへの画像送信ゼロ）</span>
+                </div>
               </div>
-              <button type="button" class="btn btn-sm btn-outline btn-refresh-cache" style="width: 100%; margin-top: 6px; justify-content: center;">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
-                キャッシュを削除して最新版に更新
-              </button>
+            </div>
+
+            <div class="control-group">
+              <span class="control-label">ショートカットキー & Tips</span>
+              <div class="other-section-card">
+                <div class="shortcut-row">
+                  <span class="shortcut-desc">写真を開く / 変更</span>
+                  <span class="shortcut-key">Ctrl + O</span>
+                </div>
+                <div class="shortcut-row">
+                  <span class="shortcut-desc">画像を保存</span>
+                  <span class="shortcut-key">Ctrl + S</span>
+                </div>
+                <div class="shortcut-row">
+                  <span class="shortcut-desc">ドラッグ＆ドロップ</span>
+                  <span style="font-size: 0.75rem; color: var(--text-secondary);">画面どこでも写真ファイルをドロップして入替可能</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <span class="control-label">リンク & ソースコード</span>
+              <div class="other-section-card">
+                <a href="https://github.com/ao-ba/SpecFrame" target="_blank" rel="noopener noreferrer" class="btn btn-outline" style="width: 100%; justify-content: center; gap: 8px;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                  GitHub リポジトリ (ao-ba/SpecFrame)
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -581,9 +623,9 @@
 
   <!-- Vendor & Core Scripts -->
   <script src="./vendor/exifr.full.umd.js"></script>
-  <script src="./js/exif-service.js?v=1.4.1"></script>
-  <script src="./js/palette.js?v=1.4.1"></script>
-  <script src="./js/renderer.js?v=1.4.1"></script>
-  <script src="./js/app.js?v=1.4.1"></script>
+  <script src="./js/exif-service.js?v=1.4.2"></script>
+  <script src="./js/palette.js?v=1.4.2"></script>
+  <script src="./js/renderer.js?v=1.4.2"></script>
+  <script src="./js/app.js?v=1.4.2"></script>
 </body>
 </html>
