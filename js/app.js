@@ -99,7 +99,9 @@ document.addEventListener('DOMContentLoaded', () => {
    * ------------------------------------------------------------------ */
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./sw.js').catch((err) => {
+      navigator.serviceWorker.register('./sw.js').then((reg) => {
+        reg.update();
+      }).catch((err) => {
         console.warn('Service worker registration failed:', err);
       });
     });
@@ -171,6 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Trigger Render
       renderCanvas();
+      setTimeout(fitPreviewCanvas, 40);
     };
 
     img.src = src;
@@ -285,23 +288,27 @@ document.addEventListener('DOMContentLoaded', () => {
   function fitPreviewCanvas() {
     if (!previewCanvas || !previewContainer) return;
 
+    // Use getBoundingClientRect for accurate layout dimension calculation
+    const rect = previewContainer.getBoundingClientRect();
+    if (!rect || rect.width <= 0 || rect.height <= 0) return;
+
     // Available space inside viewport container (minus padding for breathing room)
-    const paddingX = 24;
-    const paddingY = 24;
-    const containerW = Math.max(10, previewContainer.clientWidth - paddingX);
-    const containerH = Math.max(10, previewContainer.clientHeight - paddingY);
+    const paddingX = 20;
+    const paddingY = 20;
+    const availW = Math.max(20, Math.floor(rect.width - paddingX));
+    const availH = Math.max(20, Math.floor(rect.height - paddingY));
 
     const canvasW = previewCanvas.width;
     const canvasH = previewCanvas.height;
     if (!canvasW || !canvasH) return;
 
-    // Calculate scale factor so the canvas ALWAYS fits 100% inside containerW and containerH
-    const scale = Math.min(containerW / canvasW, containerH / canvasH);
+    // Calculate scale factor so the canvas ALWAYS fits 100% inside availW and availH
+    const scale = Math.min(availW / canvasW, availH / canvasH);
     const displayW = Math.max(1, Math.floor(canvasW * scale));
     const displayH = Math.max(1, Math.floor(canvasH * scale));
 
-    previewCanvas.style.width = `${displayW}px`;
-    previewCanvas.style.height = `${displayH}px`;
+    previewCanvas.style.setProperty('width', `${displayW}px`, 'important');
+    previewCanvas.style.setProperty('height', `${displayH}px`, 'important');
   }
 
   function renderCanvas() {
@@ -324,6 +331,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Auto-fit display size so the complete frame is always fully visible with zero scrolling
     fitPreviewCanvas();
+    requestAnimationFrame(() => {
+      fitPreviewCanvas();
+    });
   }
 
   /* ------------------------------------------------------------------
