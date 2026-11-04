@@ -124,7 +124,7 @@ class FrameRenderer {
    * Elegant outer borders with extended bottom bar featuring brand badge & specs
    */
   renderClassicFrame({ image, metadata, options, targetCrop, croppedW, croppedH }) {
-    const scale = Math.max(1, croppedW / 1800);
+    const scale = croppedW / 1800;
     const border = Math.round(croppedW * 0.045 * (options.borderScale || 1.0));
     const bottomBar = Math.round(croppedW * 0.12 * (options.bottomBarScale || 1.0));
 
@@ -232,7 +232,7 @@ class FrameRenderer {
    * Precise typography, Swedish minimalist accent line, geometric exposure badge pills
    */
   renderHasselbladFrame({ image, metadata, options, targetCrop, croppedW, croppedH }) {
-    const scale = Math.max(1, croppedW / 1800);
+    const scale = croppedW / 1800;
     const border = Math.round(croppedW * 0.05 * (options.borderScale || 1.0));
     const bottomBar = Math.round(croppedW * 0.14 * (options.bottomBarScale || 1.0));
 
@@ -351,7 +351,7 @@ class FrameRenderer {
    * Clean hairline frame with single-line metadata and bullet dots
    */
   renderMinimalFrame({ image, metadata, options, targetCrop, croppedW, croppedH }) {
-    const scale = Math.max(1, croppedW / 1800);
+    const scale = croppedW / 1800;
     const border = Math.round(croppedW * 0.03 * (options.borderScale || 1.0));
     const bottomBar = Math.round(croppedW * 0.075 * (options.bottomBarScale || 1.0));
 
@@ -406,7 +406,7 @@ class FrameRenderer {
    * Authentic proportions: equal top and sides with large bottom chin, typewriter/handwritten font
    */
   renderPolaroidFrame({ image, metadata, options, targetCrop, croppedW, croppedH }) {
-    const scale = Math.max(1, croppedW / 1800);
+    const scale = croppedW / 1800;
     const border = Math.round(croppedW * 0.06 * (options.borderScale || 1.0));
     const bottomBar = Math.round(croppedW * 0.22 * (options.bottomBarScale || 1.0));
 
@@ -469,7 +469,7 @@ class FrameRenderer {
    * Dark top and bottom cinematic matte bars with illuminated corner camera stats
    */
   renderCinemaFrame({ image, metadata, options, targetCrop, croppedW, croppedH }) {
-    const scale = Math.max(1, croppedW / 1800);
+    const scale = croppedW / 1800;
     const barH = Math.round(croppedH * 0.12 * (options.bottomBarScale || 1.0));
 
     const totalW = croppedW;
@@ -542,7 +542,7 @@ class FrameRenderer {
    * Sprocket holes, frame counter "▶ 24A", film stock label and exposure stats
    */
   renderFilmNegativeFrame({ image, metadata, options, targetCrop, croppedW, croppedH }) {
-    const scale = Math.max(1, croppedW / 1800);
+    const scale = croppedW / 1800;
     const border = Math.round(croppedW * 0.04 * (options.borderScale || 1.0));
     const sprocketBarH = Math.round(croppedW * 0.09 * (options.bottomBarScale || 1.0));
 
@@ -612,7 +612,7 @@ class FrameRenderer {
    * 100% original photo size (no outer border!). Stylish frosted pill in corner.
    */
   renderOverlayGlass({ image, metadata, options, targetCrop, croppedW, croppedH }) {
-    const scale = Math.max(1, croppedW / 1800);
+    const scale = croppedW / 1800;
     this.canvas.width = croppedW;
     this.canvas.height = croppedH;
     const ctx = this.ctx;
@@ -705,7 +705,7 @@ class FrameRenderer {
    * Text placed directly over photo with soft readable drop-shadow
    */
   renderOverlayClean({ image, metadata, options, targetCrop, croppedW, croppedH }) {
-    const scale = Math.max(1, croppedW / 1800);
+    const scale = croppedW / 1800;
     this.canvas.width = croppedW;
     this.canvas.height = croppedH;
     const ctx = this.ctx;
@@ -768,7 +768,7 @@ class FrameRenderer {
    * Iconic amber LCD font in bottom right corner
    */
   renderOverlayQuartz({ image, metadata, options, targetCrop, croppedW, croppedH }) {
-    const scale = Math.max(1, croppedW / 1800);
+    const scale = croppedW / 1800;
     this.canvas.width = croppedW;
     this.canvas.height = croppedH;
     const ctx = this.ctx;
