@@ -1,4 +1,4 @@
-const CACHE_NAME = 'specframe-v1.4.2';
+const CACHE_NAME = 'specframe-v1.4.4';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -9,6 +9,7 @@ const ASSETS_TO_CACHE = [
   './js/palette.js',
   './vendor/exifr.full.umd.js',
   './icons/icon.svg',
+  './icons/icon-512.png',
   './icons/icon-512.jpg',
   './assets/sample1.jpg',
   './assets/sample2.jpg',
