@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>SpecFrame - 写真Exifフレーム＆メタデータ表示ジェネレーター</title>
   <meta name="description" content="アップロードした写真のExif情報（ISO感度・シャッタースピード・絞り値・レンズ名・撮影日時など）を読み取り、美しい展示フレームやシネマ風、ポラロイド風、オーバーレイバッジを自動生成して保存できるPWA Webアプリケーション。">
   <meta name="keywords" content="Exif, 写真フレーム, カメラ情報, ISO感度, シャッタースピード, 絞り, Leica風, PWA, GitHub Pages">
@@ -28,7 +28,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&family=Playfair+Display:ital,wght@0,600;1,700&family=VT323&display=swap" rel="stylesheet">
 
   <!-- App Stylesheet -->
-  <link rel="stylesheet" href="./css/style.css?v=1.4.7">
+  <link rel="stylesheet" href="./css/style.css?v=1.5.0">
 </head>
 <body>
   <!-- App Header -->
@@ -100,7 +100,7 @@
         </div>
 
         <div class="empty-state-footer">
-          <span class="app-version-badge">SpecFrame v1.4.7</span>
+          <span class="app-version-badge">SpecFrame v1.5.0</span>
           <span class="footer-divider">•</span>
           <button type="button" class="btn-refresh-cache" title="キャッシュを消去して最新版を取得">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
@@ -126,8 +126,22 @@
         </div>
 
         <div class="canvas-viewport" id="preview-container">
-          <div class="canvas-shadow-wrapper">
+          <div class="canvas-shadow-wrapper" id="canvas-shadow-wrapper">
             <canvas id="preview-canvas"></canvas>
+          </div>
+
+          <!-- Zoom & Reset Controller -->
+          <div class="preview-zoom-bar" id="preview-zoom-bar" role="toolbar" aria-label="プレビュー拡大縮小操作">
+            <button type="button" class="zoom-btn" id="zoom-out-btn" title="縮小" aria-label="縮小">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </button>
+            <button type="button" class="zoom-btn zoom-reset-btn" id="zoom-reset-btn" title="元の倍率に戻す (100%)" aria-label="元の倍率に戻す">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><polyline points="3 3 3 8 8 8"/></svg>
+              <span id="zoom-level-text">100%</span>
+            </button>
+            <button type="button" class="zoom-btn" id="zoom-in-btn" title="拡大" aria-label="拡大">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </button>
           </div>
         </div>
 
@@ -136,7 +150,7 @@
             <span style="font-size: 0.8rem; color: var(--text-muted);">
               💡 リアルタイムプレビュー中（ネイティブ高解像度書き出し対応）
             </span>
-            <span class="app-version-badge">v1.4.7</span>
+            <span class="app-version-badge">v1.5.0</span>
           </div>
 
           <div class="stage-bottombar-actions">
@@ -370,9 +384,9 @@
             <div class="control-group">
               <div class="control-label">
                 <span>文字サイズ (フォント倍率)</span>
-                <span id="font-size-scale-val" class="control-val">100%</span>
+                <span id="font-size-scale-val" class="control-val">130%</span>
               </div>
-              <input type="range" id="font-size-scale-input" min="0.6" max="1.8" step="0.05" value="1.0">
+              <input type="range" id="font-size-scale-input" min="0.6" max="1.8" step="0.05" value="1.3">
             </div>
 
             <!-- Aspect Ratio -->
@@ -577,7 +591,7 @@
                 <div class="other-card-header">
                   <div>
                     <span class="other-app-title">SpecFrame</span>
-                    <span class="app-version-badge">v1.4.7</span>
+                    <span class="app-version-badge">v1.5.0</span>
                   </div>
                   <span class="status-indicator">● 最新版稼働中</span>
                 </div>
@@ -640,9 +654,9 @@
 
   <!-- Vendor & Core Scripts -->
   <script src="./vendor/exifr.full.umd.js"></script>
-  <script src="./js/exif-service.js?v=1.4.7"></script>
-  <script src="./js/palette.js?v=1.4.7"></script>
-  <script src="./js/renderer.js?v=1.4.7"></script>
-  <script src="./js/app.js?v=1.4.7"></script>
+  <script src="./js/exif-service.js?v=1.5.0"></script>
+  <script src="./js/palette.js?v=1.5.0"></script>
+  <script src="./js/renderer.js?v=1.5.0"></script>
+  <script src="./js/app.js?v=1.5.0"></script>
 </body>
 </html>

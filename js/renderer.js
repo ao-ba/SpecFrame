@@ -15,22 +15,22 @@ class FrameRenderer {
    * @param {Object} options
    * @returns {HTMLCanvasElement}
    */
-  render(image, metadata, options) {
-    const {
-      preset = 'classic',
-      frameColor = '#FFFFFF',
-      textColor = '#111827',
-      accentColor = '#E02424',
-      fontFamily = 'sans',
-      fontSizeScale = 1.0,
-      borderScale = 1.0,
-      bottomBarScale = 1.0,
-      cornerRadius = 0,
-      shadowEnabled = false,
-      shadowBlur = 24,
-      aspectRatio = 'original',
-      brandLogo = 'auto',
-      items = {
+  render(image, metadata, options = {}) {
+    const opts = {
+      preset: 'classic',
+      frameColor: '#FFFFFF',
+      textColor: '#111827',
+      accentColor: '#E02424',
+      fontFamily: 'sans',
+      fontSizeScale: 1.3,
+      borderScale: 1.0,
+      bottomBarScale: 1.0,
+      cornerRadius: 0,
+      shadowEnabled: false,
+      shadowBlur: 24,
+      aspectRatio: 'original',
+      brandLogo: 'auto',
+      items: {
         camera: true,
         lens: true,
         exposure: true,
@@ -40,8 +40,17 @@ class FrameRenderer {
         location: false,
         author: true,
         logo: true
-      }
-    } = options;
+      },
+      ...options
+    };
+    if (opts.fontSizeScale === undefined || opts.fontSizeScale === null) {
+      opts.fontSizeScale = 1.3;
+    }
+
+    const {
+      preset,
+      aspectRatio
+    } = opts;
 
     const imgW = image.naturalWidth || image.width;
     const imgH = image.naturalHeight || image.height;
@@ -55,52 +64,52 @@ class FrameRenderer {
     switch (preset) {
       case 'classic': // Leica Exhibition Style
         return this.renderClassicFrame({
-          image, metadata, options,
+          image, metadata, options: opts,
           imgW, imgH, targetCrop, croppedW, croppedH
         });
       case 'hasselblad': // Medium Format Technical
         return this.renderHasselbladFrame({
-          image, metadata, options,
+          image, metadata, options: opts,
           imgW, imgH, targetCrop, croppedW, croppedH
         });
       case 'minimal': // Modern Hairline Minimal
         return this.renderMinimalFrame({
-          image, metadata, options,
+          image, metadata, options: opts,
           imgW, imgH, targetCrop, croppedW, croppedH
         });
       case 'polaroid': // Instant Film Style
         return this.renderPolaroidFrame({
-          image, metadata, options,
+          image, metadata, options: opts,
           imgW, imgH, targetCrop, croppedW, croppedH
         });
       case 'cinema': // Cinematic Letterbox
         return this.renderCinemaFrame({
-          image, metadata, options,
+          image, metadata, options: opts,
           imgW, imgH, targetCrop, croppedW, croppedH
         });
       case 'film': // 35mm Analog Negative & Sprocket
         return this.renderFilmNegativeFrame({
-          image, metadata, options,
+          image, metadata, options: opts,
           imgW, imgH, targetCrop, croppedW, croppedH
         });
       case 'overlay-glass': // In-image Frosted Glass Pill
         return this.renderOverlayGlass({
-          image, metadata, options,
+          image, metadata, options: opts,
           imgW, imgH, targetCrop, croppedW, croppedH
         });
       case 'overlay-clean': // In-image Direct Watermark
         return this.renderOverlayClean({
-          image, metadata, options,
+          image, metadata, options: opts,
           imgW, imgH, targetCrop, croppedW, croppedH
         });
       case 'overlay-quartz': // Retro 90s Amber Date Stamp
         return this.renderOverlayQuartz({
-          image, metadata, options,
+          image, metadata, options: opts,
           imgW, imgH, targetCrop, croppedW, croppedH
         });
       default:
         return this.renderClassicFrame({
-          image, metadata, options,
+          image, metadata, options: opts,
           imgW, imgH, targetCrop, croppedW, croppedH
         });
     }
@@ -148,7 +157,7 @@ class FrameRenderer {
     const centerY = barY + barH * 0.5;
     let leftCursor = photoX + paddingX;
 
-    const fontScale = options.fontSizeScale || 1.0;
+    const fontScale = options.fontSizeScale !== undefined ? options.fontSizeScale : 1.3;
     const logoSize = Math.round(28 * scale * Math.min(1.4, Math.max(0.7, fontScale)));
     if (options.items.logo) {
       const logoBrand = this.resolveBrand(metadata, options.brandLogo);
@@ -263,7 +272,7 @@ class FrameRenderer {
     ctx.textAlign = 'left';
     ctx.textBaseline = 'middle';
 
-    const fontScale = options.fontSizeScale || 1.0;
+    const fontScale = options.fontSizeScale !== undefined ? options.fontSizeScale : 1.3;
     let leftX = photoX + paddingX;
     if (options.items.logo) {
       const logoBrand = this.resolveBrand(metadata, options.brandLogo);
@@ -379,7 +388,7 @@ class FrameRenderer {
     if (options.items.date && metadata.date) parts.push(metadata.date);
     if (options.items.author && metadata.author) parts.push(metadata.author);
 
-    const fontScale = options.fontSizeScale || 1.0;
+    const fontScale = options.fontSizeScale !== undefined ? options.fontSizeScale : 1.3;
     const fullText = parts.join('   ·   ');
     const fontSize = Math.round(16 * scale * fontScale);
 
@@ -435,7 +444,7 @@ class FrameRenderer {
     }
     if (options.items.date && metadata.date) specs.push(metadata.date);
 
-    const fontScale = options.fontSizeScale || 1.0;
+    const fontScale = options.fontSizeScale !== undefined ? options.fontSizeScale : 1.3;
     const titleSize = Math.round(30 * scale * fontScale);
     const specSize = Math.round(16 * scale * fontScale);
 
@@ -484,7 +493,7 @@ class FrameRenderer {
     const fontBase = this.getFontFamily('mono');
     const padX = Math.round(croppedW * 0.04);
 
-    const fontScale = options.fontSizeScale || 1.0;
+    const fontScale = options.fontSizeScale !== undefined ? options.fontSizeScale : 1.3;
     const topCenterY = barH / 2;
     const botCenterY = totalH - barH / 2;
     const fontSize = Math.round(14 * scale * fontScale);
@@ -570,7 +579,7 @@ class FrameRenderer {
     this.drawPhotoWithCorners(ctx, image, targetCrop, photoX, photoY, croppedW, croppedH, options);
 
     // Film Stamp texts in amber/gold color
-    const fontScale = options.fontSizeScale || 1.0;
+    const fontScale = options.fontSizeScale !== undefined ? options.fontSizeScale : 1.3;
     const amber = '#F59E0B';
     const fontBase = this.getFontFamily('mono');
     const fontSize = Math.round(14 * scale * fontScale);
@@ -632,7 +641,7 @@ class FrameRenderer {
     const titleLine = titleParts.join('  ·  ') || 'SpecFrame';
     const specsLine = specParts.join('   ');
 
-    const fontScale = options.fontSizeScale || 1.0;
+    const fontScale = options.fontSizeScale !== undefined ? options.fontSizeScale : 1.3;
     const titleSize = Math.round(18 * scale * fontScale);
     const specSize = Math.round(14 * scale * fontScale);
 
@@ -725,7 +734,7 @@ class FrameRenderer {
     const titleLine = titleParts.join('  ·  ');
     const specsLine = specParts.join('   ');
 
-    const fontScale = options.fontSizeScale || 1.0;
+    const fontScale = options.fontSizeScale !== undefined ? options.fontSizeScale : 1.3;
     const titleSize = Math.round(22 * scale * fontScale);
     const specSize = Math.round(16 * scale * fontScale);
 
@@ -785,7 +794,7 @@ class FrameRenderer {
     if (metadata.shutterSpeed) specs.push(metadata.shutterSpeed.replace('s', ''));
     if (metadata.iso) specs.push(metadata.iso);
 
-    const fontScale = options.fontSizeScale || 1.0;
+    const fontScale = options.fontSizeScale !== undefined ? options.fontSizeScale : 1.3;
     const stampLine = `${dateStr}   ${specs.join(' ')}`;
     const fontSize = Math.round(36 * scale * fontScale);
 

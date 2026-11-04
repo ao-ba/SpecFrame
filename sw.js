@@ -1,4 +1,4 @@
-const CACHE_NAME = 'specframe-v1.4.7';
+const CACHE_NAME = 'specframe-v1.5.0';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',

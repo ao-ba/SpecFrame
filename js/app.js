@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
       textColor: '#111827',
       accentColor: '#E02424',
       fontFamily: 'sans',
-      fontSizeScale: 1.0,
+      fontSizeScale: 1.3,
       borderScale: 1.0,
       bottomBarScale: 1.0,
       cornerRadius: 0,
@@ -48,6 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const fileInput = document.getElementById('file-input');
   const previewCanvas = document.getElementById('preview-canvas');
   const previewContainer = document.getElementById('preview-container');
+  const canvasShadowWrapper = document.getElementById('canvas-shadow-wrapper');
   const emptyState = document.getElementById('empty-state');
   const activeWorkspace = document.getElementById('active-workspace');
   const downloadBtn = document.getElementById('download-btn');
@@ -55,6 +56,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const pwaInstallBtn = document.getElementById('pwa-install-btn');
   const resolutionBadge = document.getElementById('resolution-badge');
   const paletteChipsContainer = document.getElementById('palette-chips');
+
+  // Preview Zoom & Pan Elements
+  const zoomInBtn = document.getElementById('zoom-in-btn');
+  const zoomOutBtn = document.getElementById('zoom-out-btn');
+  const zoomResetBtn = document.getElementById('zoom-reset-btn');
+  const zoomLevelText = document.getElementById('zoom-level-text');
 
   // Sample Buttons
   const sample1Btn = document.getElementById('sample-1-btn');
@@ -172,6 +179,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (activeWorkspace) activeWorkspace.classList.remove('hidden');
 
       // Trigger Render
+      resetPreviewZoom(false);
       renderCanvas();
       setTimeout(fitPreviewCanvas, 40);
     };
@@ -283,6 +291,105 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ------------------------------------------------------------------
+   * Preview Zoom & Pan Controller (Touch Pinch, Drag & Button Controls)
+   * Prevents full-page pinch zoom while allowing buttery smooth frame inspection
+   * ------------------------------------------------------------------ */
+  const zoomState = {
+    scale: 1.0,
+    panX: 0,
+    panY: 0,
+    minScale: 1.0,
+    maxScale: 4.0,
+    step: 0.25,
+    isDragging: false,
+    dragStartX: 0,
+    dragStartY: 0,
+    initialPanX: 0,
+    initialPanY: 0,
+    initialPinchDist: 0,
+    initialPinchScale: 1.0,
+    initialPinchCenter: { x: 0, y: 0 },
+    lastTapTime: 0
+  };
+
+  function clampPan() {
+    if (zoomState.scale <= 1.001) {
+      zoomState.panX = 0;
+      zoomState.panY = 0;
+      return;
+    }
+
+    if (!previewCanvas || !previewContainer) return;
+    const contRect = previewContainer.getBoundingClientRect();
+    const canvasRect = previewCanvas.getBoundingClientRect();
+
+    const baseW = parseFloat(previewCanvas.style.width) || (canvasRect.width / zoomState.scale);
+    const baseH = parseFloat(previewCanvas.style.height) || (canvasRect.height / zoomState.scale);
+
+    const scaledW = baseW * zoomState.scale;
+    const scaledH = baseH * zoomState.scale;
+
+    const maxPanX = Math.max(0, (scaledW - contRect.width) / 2 + 60);
+    const maxPanY = Math.max(0, (scaledH - contRect.height) / 2 + 60);
+
+    zoomState.panX = Math.max(-maxPanX, Math.min(maxPanX, zoomState.panX));
+    zoomState.panY = Math.max(-maxPanY, Math.min(maxPanY, zoomState.panY));
+  }
+
+  function updateZoomTransform(animated = false) {
+    if (!canvasShadowWrapper) return;
+
+    if (animated) {
+      canvasShadowWrapper.style.transition = 'transform 0.25s cubic-bezier(0.2, 0.9, 0.3, 1)';
+    } else {
+      canvasShadowWrapper.style.transition = 'none';
+    }
+
+    clampPan();
+
+    canvasShadowWrapper.style.transform = `translate3d(${zoomState.panX}px, ${zoomState.panY}px, 0) scale(${zoomState.scale})`;
+
+    const percent = Math.round(zoomState.scale * 100);
+    if (zoomLevelText) {
+      zoomLevelText.textContent = `${percent}%`;
+    }
+
+    if (zoomResetBtn) {
+      const isModified = Math.abs(zoomState.scale - 1.0) > 0.01 || Math.abs(zoomState.panX) > 1 || Math.abs(zoomState.panY) > 1;
+      if (isModified) {
+        zoomResetBtn.classList.add('is-active');
+        zoomResetBtn.title = '元の倍率に戻す (100%)';
+      } else {
+        zoomResetBtn.classList.remove('is-active');
+        zoomResetBtn.title = '等倍 (100%)';
+      }
+    }
+
+    if (zoomState.scale > 1.01) {
+      canvasShadowWrapper.classList.add('is-zoomed');
+    } else {
+      canvasShadowWrapper.classList.remove('is-zoomed');
+    }
+  }
+
+  function setZoom(newScale, animated = true) {
+    const clampedScale = Math.max(zoomState.minScale, Math.min(zoomState.maxScale, Math.round(newScale * 100) / 100));
+    zoomState.scale = clampedScale;
+    if (zoomState.scale <= 1.001) {
+      zoomState.panX = 0;
+      zoomState.panY = 0;
+    }
+    updateZoomTransform(animated);
+  }
+
+  function resetPreviewZoom(animated = true) {
+    zoomState.scale = 1.0;
+    zoomState.panX = 0;
+    zoomState.panY = 0;
+    updateZoomTransform(animated);
+  }
+
+  /* ------------------------------------------------------------------
    * Render Dispatcher & Dynamic Auto-Fit
    * ------------------------------------------------------------------ */
   function fitPreviewCanvas() {
@@ -309,6 +416,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     previewCanvas.style.setProperty('width', `${displayW}px`, 'important');
     previewCanvas.style.setProperty('height', `${displayH}px`, 'important');
+
+    updateZoomTransform(false);
   }
 
   function renderCanvas() {
@@ -429,6 +538,7 @@ document.addEventListener('DOMContentLoaded', () => {
       card.classList.add('active');
       const presetId = card.dataset.preset;
       applyPresetStyles(presetId);
+      resetPreviewZoom(true);
       renderCanvas();
     });
   });
@@ -489,14 +599,14 @@ document.addEventListener('DOMContentLoaded', () => {
       state.options.borderScale = 1.0;
       state.options.bottomBarScale = 1.0;
       state.options.cornerRadius = 0;
-      state.options.fontSizeScale = 1.0;
+      state.options.fontSizeScale = 1.3;
       state.options.aspectRatio = 'original';
       state.options.brandLogo = 'auto';
 
       if (borderScaleInput) { borderScaleInput.value = 1.0; borderScaleVal.textContent = '100%'; }
       if (bottomBarScaleInput) { bottomBarScaleInput.value = 1.0; bottomBarScaleVal.textContent = '100%'; }
       if (cornerRadiusInput) { cornerRadiusInput.value = 0; cornerRadiusVal.textContent = '0px'; }
-      if (fontSizeScaleInput) { fontSizeScaleInput.value = 1.0; fontSizeScaleVal.textContent = '100%'; }
+      if (fontSizeScaleInput) { fontSizeScaleInput.value = 1.3; fontSizeScaleVal.textContent = '130%'; }
       if (aspectRatioSelect) aspectRatioSelect.value = 'original';
       if (brandLogoSelect) brandLogoSelect.value = 'auto';
 
@@ -666,6 +776,180 @@ document.addEventListener('DOMContentLoaded', () => {
   if (changePhotoBtn) {
     changePhotoBtn.addEventListener('click', () => {
       if (fileInput) fileInput.click();
+    });
+  }
+
+  /* ------------------------------------------------------------------
+   * Preview Zoom & Pan Event Listeners (Mobile Pinch/Pan & Desktop Controls)
+   * ------------------------------------------------------------------ */
+  if (previewContainer) {
+    // Suppress Safari native gestures on the canvas preview viewport
+    ['gesturestart', 'gesturechange', 'gestureend'].forEach((evName) => {
+      previewContainer.addEventListener(evName, (e) => {
+        e.preventDefault();
+      }, { passive: false });
+    });
+
+    // Touch events for mobile Pinch & Pan
+    previewContainer.addEventListener('touchstart', (e) => {
+      if (e.target.closest('#preview-zoom-bar')) return;
+
+      if (e.touches.length === 2) {
+        // Pinch start
+        e.preventDefault();
+        zoomState.isDragging = false;
+        const dx = e.touches[0].clientX - e.touches[1].clientX;
+        const dy = e.touches[0].clientY - e.touches[1].clientY;
+        zoomState.initialPinchDist = Math.hypot(dx, dy);
+        zoomState.initialPinchScale = zoomState.scale;
+        zoomState.initialPinchCenter = {
+          x: (e.touches[0].clientX + e.touches[1].clientX) / 2,
+          y: (e.touches[0].clientY + e.touches[1].clientY) / 2
+        };
+        zoomState.initialPanX = zoomState.panX;
+        zoomState.initialPanY = zoomState.panY;
+      } else if (e.touches.length === 1) {
+        // Double-tap inspection toggle: 100% -> 200% -> 100%
+        const now = Date.now();
+        if (now - zoomState.lastTapTime < 320) {
+          e.preventDefault();
+          if (zoomState.scale > 1.05) {
+            resetPreviewZoom(true);
+          } else {
+            setZoom(2.0, true);
+          }
+          zoomState.lastTapTime = 0;
+          return;
+        }
+        zoomState.lastTapTime = now;
+
+        // Pan start when zoomed in
+        if (zoomState.scale > 1.01) {
+          e.preventDefault();
+          zoomState.isDragging = true;
+          zoomState.dragStartX = e.touches[0].clientX;
+          zoomState.dragStartY = e.touches[0].clientY;
+          zoomState.initialPanX = zoomState.panX;
+          zoomState.initialPanY = zoomState.panY;
+          if (canvasShadowWrapper) canvasShadowWrapper.classList.add('is-dragging');
+        }
+      }
+    }, { passive: false });
+
+    previewContainer.addEventListener('touchmove', (e) => {
+      if (e.target.closest('#preview-zoom-bar')) return;
+
+      if (e.touches.length === 2 && zoomState.initialPinchDist > 0) {
+        // Pinch moving
+        e.preventDefault();
+        const dx = e.touches[0].clientX - e.touches[1].clientX;
+        const dy = e.touches[0].clientY - e.touches[1].clientY;
+        const currentDist = Math.hypot(dx, dy);
+        const factor = currentDist / zoomState.initialPinchDist;
+        const targetScale = Math.max(zoomState.minScale, Math.min(zoomState.maxScale, zoomState.initialPinchScale * factor));
+        zoomState.scale = targetScale;
+
+        const currentCenter = {
+          x: (e.touches[0].clientX + e.touches[1].clientX) / 2,
+          y: (e.touches[0].clientY + e.touches[1].clientY) / 2
+        };
+        zoomState.panX = zoomState.initialPanX + (currentCenter.x - zoomState.initialPinchCenter.x);
+        zoomState.panY = zoomState.initialPanY + (currentCenter.y - zoomState.initialPinchCenter.y);
+
+        updateZoomTransform(false);
+      } else if (e.touches.length === 1 && zoomState.isDragging) {
+        // Pan moving
+        e.preventDefault();
+        const deltaX = e.touches[0].clientX - zoomState.dragStartX;
+        const deltaY = e.touches[0].clientY - zoomState.dragStartY;
+        zoomState.panX = zoomState.initialPanX + deltaX;
+        zoomState.panY = zoomState.initialPanY + deltaY;
+        updateZoomTransform(false);
+      }
+    }, { passive: false });
+
+    previewContainer.addEventListener('touchend', (e) => {
+      if (zoomState.isDragging) {
+        zoomState.isDragging = false;
+        if (canvasShadowWrapper) canvasShadowWrapper.classList.remove('is-dragging');
+      }
+      if (e.touches.length === 0) {
+        zoomState.initialPinchDist = 0;
+        if (zoomState.scale <= 1.02) {
+          resetPreviewZoom(true);
+        } else {
+          updateZoomTransform(true);
+        }
+      }
+    });
+
+    previewContainer.addEventListener('touchcancel', () => {
+      zoomState.isDragging = false;
+      zoomState.initialPinchDist = 0;
+      if (canvasShadowWrapper) canvasShadowWrapper.classList.remove('is-dragging');
+      updateZoomTransform(true);
+    });
+
+    // Mouse Drag Pan for Desktop
+    previewContainer.addEventListener('mousedown', (e) => {
+      if (e.target.closest('#preview-zoom-bar')) return;
+      if (zoomState.scale > 1.01 && e.button === 0) {
+        e.preventDefault();
+        zoomState.isDragging = true;
+        zoomState.dragStartX = e.clientX;
+        zoomState.dragStartY = e.clientY;
+        zoomState.initialPanX = zoomState.panX;
+        zoomState.initialPanY = zoomState.panY;
+        if (canvasShadowWrapper) canvasShadowWrapper.classList.add('is-dragging');
+      }
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (!zoomState.isDragging) return;
+      e.preventDefault();
+      const deltaX = e.clientX - zoomState.dragStartX;
+      const deltaY = e.clientY - zoomState.dragStartY;
+      zoomState.panX = zoomState.initialPanX + deltaX;
+      zoomState.panY = zoomState.initialPanY + deltaY;
+      updateZoomTransform(false);
+    });
+
+    window.addEventListener('mouseup', () => {
+      if (zoomState.isDragging) {
+        zoomState.isDragging = false;
+        if (canvasShadowWrapper) canvasShadowWrapper.classList.remove('is-dragging');
+        updateZoomTransform(true);
+      }
+    });
+
+    // Mouse Wheel Zoom
+    previewContainer.addEventListener('wheel', (e) => {
+      if (e.target.closest('#preview-zoom-bar')) return;
+      e.preventDefault();
+      const delta = e.deltaY < 0 ? zoomState.step : -zoomState.step;
+      setZoom(zoomState.scale + delta, true);
+    }, { passive: false });
+  }
+
+  // Zoom Button Controls
+  if (zoomInBtn) {
+    zoomInBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      setZoom(zoomState.scale + zoomState.step, true);
+    });
+  }
+
+  if (zoomOutBtn) {
+    zoomOutBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      setZoom(zoomState.scale - zoomState.step, true);
+    });
+  }
+
+  if (zoomResetBtn) {
+    zoomResetBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      resetPreviewZoom(true);
     });
   }
 
