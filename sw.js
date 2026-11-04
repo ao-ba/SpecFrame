@@ -1,4 +1,4 @@
-const CACHE_NAME = 'specframe-v1.5.2';
+const CACHE_NAME = 'specframe-v1.6.0';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -15,6 +15,12 @@ const ASSETS_TO_CACHE = [
   './assets/sample2.jpg',
   './manifest.webmanifest'
 ];
+
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
+});
 
 self.addEventListener('install', (event) => {
   event.waitUntil(

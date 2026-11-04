@@ -28,9 +28,24 @@
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&family=Playfair+Display:ital,wght@0,600;1,700&family=VT323&display=swap" rel="stylesheet">
 
   <!-- App Stylesheet -->
-  <link rel="stylesheet" href="./css/style.css?v=1.5.2">
+  <link rel="stylesheet" href="./css/style.css?v=1.6.0">
 </head>
 <body>
+  <!-- PWA Update Notification Toast Banner -->
+  <div id="pwa-update-toast" class="pwa-update-toast" role="alert" aria-live="assertive" style="display: none;">
+    <div class="update-toast-content">
+      <div class="update-toast-icon">🚀</div>
+      <div class="update-toast-text">
+        <span class="update-toast-title">新しいバージョンが利用可能です</span>
+        <span class="update-toast-desc" id="update-toast-desc">タップして最新機能と改善を反映</span>
+      </div>
+      <div class="update-toast-actions">
+        <button type="button" id="toast-update-btn" class="btn btn-sm btn-primary">今すぐ更新</button>
+        <button type="button" id="toast-dismiss-btn" class="btn btn-sm btn-ghost" title="閉じる" aria-label="閉じる">✕</button>
+      </div>
+    </div>
+  </div>
+
   <!-- App Header -->
   <header class="app-header">
     <div class="brand-wrapper">
@@ -100,7 +115,7 @@
         </div>
 
         <div class="empty-state-footer">
-          <span class="app-version-badge">SpecFrame v1.5.2</span>
+          <span class="app-version-badge">SpecFrame v1.6.0</span>
           <span class="footer-divider">•</span>
           <button type="button" class="btn-refresh-cache" title="キャッシュを消去して最新版を取得">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
@@ -150,7 +165,7 @@
             <span style="font-size: 0.8rem; color: var(--text-muted);">
               💡 リアルタイムプレビュー中（ネイティブ高解像度書き出し対応）
             </span>
-            <span class="app-version-badge">v1.5.2</span>
+            <span class="app-version-badge">v1.6.0</span>
           </div>
 
           <div class="stage-bottombar-actions">
@@ -591,7 +606,7 @@
                 <div class="other-card-header">
                   <div>
                     <span class="other-app-title">SpecFrame</span>
-                    <span class="app-version-badge">v1.5.2</span>
+                    <span class="app-version-badge">v1.6.0</span>
                   </div>
                   <span class="status-indicator">● 最新版稼働中</span>
                 </div>
@@ -654,9 +669,9 @@
 
   <!-- Vendor & Core Scripts -->
   <script src="./vendor/exifr.full.umd.js"></script>
-  <script src="./js/exif-service.js?v=1.5.2"></script>
-  <script src="./js/palette.js?v=1.5.2"></script>
-  <script src="./js/renderer.js?v=1.5.2"></script>
-  <script src="./js/app.js?v=1.5.2"></script>
+  <script src="./js/exif-service.js?v=1.6.0"></script>
+  <script src="./js/palette.js?v=1.6.0"></script>
+  <script src="./js/renderer.js?v=1.6.0"></script>
+  <script src="./js/app.js?v=1.6.0"></script>
 </body>
 </html>

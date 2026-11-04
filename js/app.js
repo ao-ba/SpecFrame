@@ -102,15 +102,122 @@ document.addEventListener('DOMContentLoaded', () => {
   const exportQualityVal = document.getElementById('export-quality-val');
 
   /* ------------------------------------------------------------------
-   * Service Worker & PWA Installation
+   * Service Worker & PWA Update Notification System
    * ------------------------------------------------------------------ */
+  const APP_VERSION = 'v1.6.0';
+  const pwaUpdateToast = document.getElementById('pwa-update-toast');
+  const toastUpdateBtn = document.getElementById('toast-update-btn');
+  const toastDismissBtn = document.getElementById('toast-dismiss-btn');
+  const updateToastDesc = document.getElementById('update-toast-desc');
+
+  let newWorkerWaiting = null;
+  let isRefreshing = false;
+
+  function showUpdateNotification(newVersionTag) {
+    if (!pwaUpdateToast) return;
+    if (newVersionTag && updateToastDesc) {
+      updateToastDesc.textContent = `最新バージョン (${newVersionTag}) に更新できます`;
+    }
+    pwaUpdateToast.style.display = 'block';
+  }
+
+  function hideUpdateNotification() {
+    if (!pwaUpdateToast) return;
+    pwaUpdateToast.style.display = 'none';
+  }
+
   if ('serviceWorker' in navigator) {
+    // Reload page seamlessly when new service worker takes control
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (!isRefreshing) {
+        isRefreshing = true;
+        window.location.reload();
+      }
+    });
+
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('./sw.js').then((reg) => {
+        // 1. If a worker is already waiting, show update prompt
+        if (reg.waiting) {
+          newWorkerWaiting = reg.waiting;
+          showUpdateNotification();
+        }
+
+        // 2. Listen for future updates
+        reg.addEventListener('updatefound', () => {
+          const newWorker = reg.installing;
+          if (newWorker) {
+            newWorker.addEventListener('statechange', () => {
+              if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                newWorkerWaiting = newWorker;
+                showUpdateNotification();
+              }
+            });
+          }
+        });
+
+        // 3. Proactive update check
         reg.update();
+
+        // 4. Double-check remote version directly via network fetch (bypasses browser edge caches)
+        checkRemoteVersion(reg);
       }).catch((err) => {
         console.warn('Service worker registration failed:', err);
       });
+    });
+
+    // Re-check when user returns to foreground/app
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') {
+        navigator.serviceWorker.getRegistration().then((reg) => {
+          if (reg) {
+            reg.update();
+            checkRemoteVersion(reg);
+          }
+        });
+      }
+    });
+  }
+
+  // Check remote sw.js file to verify if a newer CACHE_NAME exists on the server
+  async function checkRemoteVersion(reg) {
+    try {
+      const res = await fetch(`./sw.js?t=${Date.now()}`, { cache: 'no-store' });
+      if (!res.ok) return;
+      const text = await res.text();
+      const match = text.match(/CACHE_NAME\s*=\s*['"]specframe-([^'"]+)['"]/);
+      if (match && match[1]) {
+        const remoteVer = `v${match[1]}`;
+        if (remoteVer !== APP_VERSION) {
+          showUpdateNotification(remoteVer);
+          if (reg) reg.update();
+        }
+      }
+    } catch (e) {
+      // Offline, silently ignore
+    }
+  }
+
+  // Toast Button Actions
+  if (toastUpdateBtn) {
+    toastUpdateBtn.addEventListener('click', () => {
+      toastUpdateBtn.disabled = true;
+      toastUpdateBtn.innerHTML = '<span>⏳ 最新版へ更新中...</span>';
+
+      if (newWorkerWaiting) {
+        newWorkerWaiting.postMessage({ type: 'SKIP_WAITING' });
+      }
+
+      // Purge all caches and reload to guarantee fresh assets
+      setTimeout(() => {
+        forceAppUpdate(toastUpdateBtn);
+      }, 250);
+    });
+  }
+
+  if (toastDismissBtn) {
+    toastDismissBtn.addEventListener('click', () => {
+      hideUpdateNotification();
     });
   }
 
