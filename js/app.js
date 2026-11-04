@@ -280,8 +280,30 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ------------------------------------------------------------------
-   * Render Dispatcher
+   * Render Dispatcher & Dynamic Auto-Fit
    * ------------------------------------------------------------------ */
+  function fitPreviewCanvas() {
+    if (!previewCanvas || !previewContainer) return;
+
+    // Available space inside viewport container (minus padding for breathing room)
+    const paddingX = 24;
+    const paddingY = 24;
+    const containerW = Math.max(10, previewContainer.clientWidth - paddingX);
+    const containerH = Math.max(10, previewContainer.clientHeight - paddingY);
+
+    const canvasW = previewCanvas.width;
+    const canvasH = previewCanvas.height;
+    if (!canvasW || !canvasH) return;
+
+    // Calculate scale factor so the canvas ALWAYS fits 100% inside containerW and containerH
+    const scale = Math.min(containerW / canvasW, containerH / canvasH);
+    const displayW = Math.max(1, Math.floor(canvasW * scale));
+    const displayH = Math.max(1, Math.floor(canvasH * scale));
+
+    previewCanvas.style.width = `${displayW}px`;
+    previewCanvas.style.height = `${displayH}px`;
+  }
+
   function renderCanvas() {
     if (!state.currentImage) return;
 
@@ -299,6 +321,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (resolutionBadge) {
       resolutionBadge.textContent = `${rendered.width} × ${rendered.height} px`;
     }
+
+    // Auto-fit display size so the complete frame is always fully visible with zero scrolling
+    fitPreviewCanvas();
   }
 
   /* ------------------------------------------------------------------
@@ -632,6 +657,19 @@ document.addEventListener('DOMContentLoaded', () => {
     changePhotoBtn.addEventListener('click', () => {
       if (fileInput) fileInput.click();
     });
+  }
+
+  // Auto-fit on window resize, orientation change, or container resize
+  window.addEventListener('resize', fitPreviewCanvas);
+  window.addEventListener('orientationchange', () => {
+    setTimeout(fitPreviewCanvas, 150);
+  });
+
+  if (window.ResizeObserver && previewContainer) {
+    const ro = new ResizeObserver(() => {
+      fitPreviewCanvas();
+    });
+    ro.observe(previewContainer);
   }
 
   // Auto-load Sample 1 on initial launch so user sees the app in action immediately!
