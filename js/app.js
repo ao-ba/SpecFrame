@@ -691,4 +691,57 @@ document.addEventListener('DOMContentLoaded', () => {
     .catch(() => {
       console.log('Ready for user photo upload');
     });
+
+  /* ------------------------------------------------------------------
+   * Force Cache Clear & App Update (One-Tap PWA Refresher)
+   * ------------------------------------------------------------------ */
+  async function forceAppUpdate(triggerBtn) {
+    if (triggerBtn) {
+      triggerBtn.disabled = true;
+      triggerBtn.innerHTML = '<span>⏳ キャッシュ削除中...</span>';
+    }
+
+    try {
+      // 1. Unregister all service workers
+      if ('serviceWorker' in navigator) {
+        const registrations = await navigator.serviceWorker.getRegistrations();
+        for (const reg of registrations) {
+          await reg.unregister();
+        }
+      }
+
+      // 2. Delete all Cache Storage (purges old v1.x caches completely)
+      if ('caches' in window) {
+        const keys = await caches.keys();
+        await Promise.all(keys.map(key => caches.delete(key)));
+      }
+
+      // 3. Clear session storage
+      try {
+        sessionStorage.clear();
+      } catch (e) {}
+
+      if (triggerBtn) {
+        triggerBtn.innerHTML = '<span>✓ 完了！再読み込み中...</span>';
+      }
+
+      // 4. Force hard reload with timestamp query to bypass any disk cache
+      setTimeout(() => {
+        const url = new URL(window.location.origin + window.location.pathname);
+        url.searchParams.set('t', Date.now().toString());
+        window.location.replace(url.toString());
+      }, 300);
+    } catch (err) {
+      console.error('Cache clear failed:', err);
+      window.location.reload(true);
+    }
+  }
+
+  // Attach click listener to all .btn-refresh-cache buttons across footer and info cards
+  document.querySelectorAll('.btn-refresh-cache').forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      forceAppUpdate(btn);
+    });
+  });
 });

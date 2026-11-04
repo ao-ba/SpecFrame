@@ -28,7 +28,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&family=Playfair+Display:ital,wght@0,600;1,700&family=VT323&display=swap" rel="stylesheet">
 
   <!-- App Stylesheet -->
-  <link rel="stylesheet" href="./css/style.css?v=1.4.0">
+  <link rel="stylesheet" href="./css/style.css?v=1.4.1">
 </head>
 <body>
   <!-- App Header -->
@@ -98,6 +98,15 @@
           <button type="button" class="btn btn-sm btn-pill" onclick="document.getElementById('sample-1-btn').click();">🌃 新宿夜景 (Sony)</button>
           <button type="button" class="btn btn-sm btn-pill" onclick="document.getElementById('sample-2-btn').click();">🗻 富士山朝焼け (Fuji)</button>
         </div>
+
+        <div class="empty-state-footer">
+          <span class="app-version-badge">SpecFrame v1.4.1</span>
+          <span class="footer-divider">•</span>
+          <button type="button" class="btn-refresh-cache" title="キャッシュを消去して最新版を取得">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+            キャッシュ削除・最新版に更新
+          </button>
+        </div>
       </div>
     </div>
 
@@ -123,9 +132,17 @@
         </div>
 
         <div class="stage-bottombar">
-          <span style="font-size: 0.8rem; color: var(--text-muted);">
-            💡 リアルタイムプレビュー中（ネイティブ高解像度書き出し対応）
-          </span>
+          <div class="stage-bottombar-info">
+            <span style="font-size: 0.8rem; color: var(--text-muted);">
+              💡 リアルタイムプレビュー中（ネイティブ高解像度書き出し対応）
+            </span>
+            <span class="app-version-badge">v1.4.1</span>
+            <button type="button" class="btn-refresh-cache" title="キャッシュを消去して最新バージョンを再読み込み">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+              最新版に更新
+            </button>
+          </div>
+
           <div class="stage-bottombar-actions">
             <button type="button" id="copy-btn" class="btn btn-sm" title="クリップボードへコピー">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
@@ -134,6 +151,15 @@
             <button type="button" id="download-btn" class="btn btn-sm btn-primary" title="画像を保存 (Ctrl+S)">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
               画像を保存
+            </button>
+          </div>
+
+          <div class="mobile-footer-bar">
+            <span class="app-version-badge">SpecFrame v1.4.1</span>
+            <span class="footer-divider">•</span>
+            <button type="button" class="btn-refresh-cache mobile-btn-refresh" title="キャッシュを削除して最新版を取得">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+              キャッシュ削除・最新版に更新
             </button>
           </div>
         </div>
@@ -531,6 +557,22 @@
                 クリップボードへコピー
               </button>
             </div>
+
+            <!-- App Version & Cache Clear Card -->
+            <div class="app-info-card">
+              <div class="app-info-row">
+                <span class="app-info-label">バージョン:</span>
+                <span class="app-version-badge">SpecFrame v1.4.1</span>
+              </div>
+              <div class="app-info-row">
+                <span class="app-info-label">PWAオフライン:</span>
+                <span class="status-indicator">● 対応済み</span>
+              </div>
+              <button type="button" class="btn btn-sm btn-outline btn-refresh-cache" style="width: 100%; margin-top: 6px; justify-content: center;">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+                キャッシュを削除して最新版に更新
+              </button>
+            </div>
           </div>
         </div>
       </aside>
@@ -539,9 +581,9 @@
 
   <!-- Vendor & Core Scripts -->
   <script src="./vendor/exifr.full.umd.js"></script>
-  <script src="./js/exif-service.js?v=1.4.0"></script>
-  <script src="./js/palette.js?v=1.4.0"></script>
-  <script src="./js/renderer.js?v=1.4.0"></script>
-  <script src="./js/app.js?v=1.4.0"></script>
+  <script src="./js/exif-service.js?v=1.4.1"></script>
+  <script src="./js/palette.js?v=1.4.1"></script>
+  <script src="./js/renderer.js?v=1.4.1"></script>
+  <script src="./js/app.js?v=1.4.1"></script>
 </body>
 </html>
