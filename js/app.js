@@ -104,63 +104,124 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ------------------------------------------------------------------
    * Service Worker & PWA Update Notification System
    * ------------------------------------------------------------------ */
-  const APP_VERSION = 'v1.6.0';
+  const APP_VERSION = 'v1.6.1';
   const pwaUpdateToast = document.getElementById('pwa-update-toast');
   const toastUpdateBtn = document.getElementById('toast-update-btn');
   const toastDismissBtn = document.getElementById('toast-dismiss-btn');
+  const updateToastTitle = document.querySelector('.update-toast-title');
   const updateToastDesc = document.getElementById('update-toast-desc');
+  const updateToastIcon = document.querySelector('.update-toast-icon');
 
-  let newWorkerWaiting = null;
-  let isRefreshing = false;
+  // 1. If user just completed an update, show brief positive confirmation toast
+  if (sessionStorage.getItem('pwa_just_updated') === 'true') {
+    sessionStorage.removeItem('pwa_just_updated');
+    showUpdatedSuccessToast();
+  }
 
-  function showUpdateNotification(newVersionTag) {
+  function showUpdatedSuccessToast() {
     if (!pwaUpdateToast) return;
+    if (updateToastIcon) updateToastIcon.textContent = '✓';
+    if (updateToastTitle) updateToastTitle.textContent = `最新バージョンに更新されました (${APP_VERSION})`;
+    if (updateToastDesc) updateToastDesc.textContent = '最新の機能と改善が利用可能です';
+    if (toastUpdateBtn) toastUpdateBtn.style.display = 'none';
+    if (toastDismissBtn) toastDismissBtn.style.display = 'none';
+    pwaUpdateToast.style.borderColor = 'rgba(74, 222, 128, 0.5)';
+    pwaUpdateToast.style.display = 'block';
+
+    setTimeout(() => {
+      pwaUpdateToast.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+      pwaUpdateToast.style.opacity = '0';
+      setTimeout(() => {
+        pwaUpdateToast.style.display = 'none';
+        pwaUpdateToast.style.opacity = '1';
+        pwaUpdateToast.style.borderColor = '';
+        if (updateToastIcon) updateToastIcon.textContent = '🚀';
+        if (updateToastTitle) updateToastTitle.textContent = '新しいバージョンが利用可能です';
+        if (toastUpdateBtn) toastUpdateBtn.style.display = '';
+        if (toastDismissBtn) toastDismissBtn.style.display = '';
+      }, 500);
+    }, 2500);
+  }
+
+  function showUpdatePromptToast(newVersionTag) {
+    if (!pwaUpdateToast) return;
+    // Don't show if user dismissed this specific version in this session
+    if (sessionStorage.getItem('pwa_dismissed_version') === newVersionTag) return;
+
     if (newVersionTag && updateToastDesc) {
       updateToastDesc.textContent = `最新バージョン (${newVersionTag}) に更新できます`;
     }
     pwaUpdateToast.style.display = 'block';
   }
 
-  function hideUpdateNotification() {
+  function hideUpdateToast() {
     if (!pwaUpdateToast) return;
     pwaUpdateToast.style.display = 'none';
   }
 
-  if ('serviceWorker' in navigator) {
-    // Reload page seamlessly when new service worker takes control
-    navigator.serviceWorker.addEventListener('controllerchange', () => {
-      if (!isRefreshing) {
-        isRefreshing = true;
-        window.location.reload();
-      }
-    });
+  // Version comparator: returns true ONLY if remote is strictly newer than current
+  function isNewerVersion(remote, current) {
+    if (!remote || !current) return false;
+    const cleanRemote = remote.replace(/^v/, '');
+    const cleanCurrent = current.replace(/^v/, '');
+    if (cleanRemote === cleanCurrent) return false;
 
+    const rParts = cleanRemote.split('.').map(n => parseInt(n, 10) || 0);
+    const cParts = cleanCurrent.split('.').map(n => parseInt(n, 10) || 0);
+
+    for (let i = 0; i < Math.max(rParts.length, cParts.length); i++) {
+      const r = rParts[i] || 0;
+      const c = cParts[i] || 0;
+      if (r > c) return true;
+      if (r < c) return false;
+    }
+    return false;
+  }
+
+  // Check remote sw.js file to verify if a strictly newer CACHE_NAME exists on the server
+  async function checkRemoteVersion(reg) {
+    try {
+      const res = await fetch(`./sw.js?t=${Date.now()}`, { cache: 'no-store' });
+      if (!res.ok) return;
+      const text = await res.text();
+      const match = text.match(/CACHE_NAME\s*=\s*['"]specframe-([^'"]+)['"]/);
+      if (match && match[1]) {
+        const remoteVer = `v${match[1]}`;
+        // Strictly verify that the server version is newer than currently running version
+        if (isNewerVersion(remoteVer, APP_VERSION)) {
+          showUpdatePromptToast(remoteVer);
+          if (reg) reg.update();
+        } else {
+          // Already running latest or ahead, keep toast hidden!
+          hideUpdateToast();
+        }
+      }
+    } catch (e) {
+      // Offline, silently ignore
+    }
+  }
+
+  if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('./sw.js').then((reg) => {
-        // 1. If a worker is already waiting, show update prompt
-        if (reg.waiting) {
-          newWorkerWaiting = reg.waiting;
-          showUpdateNotification();
-        }
+        // Proactive update check
+        reg.update();
 
-        // 2. Listen for future updates
+        // Check if there is really a newer version on the server
+        checkRemoteVersion(reg);
+
+        // When a new service worker finishes installing
         reg.addEventListener('updatefound', () => {
           const newWorker = reg.installing;
           if (newWorker) {
             newWorker.addEventListener('statechange', () => {
-              if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                newWorkerWaiting = newWorker;
-                showUpdateNotification();
+              if (newWorker.state === 'installed') {
+                // Verify against server version before showing toast!
+                checkRemoteVersion(reg);
               }
             });
           }
         });
-
-        // 3. Proactive update check
-        reg.update();
-
-        // 4. Double-check remote version directly via network fetch (bypasses browser edge caches)
-        checkRemoteVersion(reg);
       }).catch((err) => {
         console.warn('Service worker registration failed:', err);
       });
@@ -179,45 +240,36 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Check remote sw.js file to verify if a newer CACHE_NAME exists on the server
-  async function checkRemoteVersion(reg) {
-    try {
-      const res = await fetch(`./sw.js?t=${Date.now()}`, { cache: 'no-store' });
-      if (!res.ok) return;
-      const text = await res.text();
-      const match = text.match(/CACHE_NAME\s*=\s*['"]specframe-([^'"]+)['"]/);
-      if (match && match[1]) {
-        const remoteVer = `v${match[1]}`;
-        if (remoteVer !== APP_VERSION) {
-          showUpdateNotification(remoteVer);
-          if (reg) reg.update();
-        }
-      }
-    } catch (e) {
-      // Offline, silently ignore
-    }
-  }
-
   // Toast Button Actions
   if (toastUpdateBtn) {
     toastUpdateBtn.addEventListener('click', () => {
       toastUpdateBtn.disabled = true;
-      toastUpdateBtn.innerHTML = '<span>⏳ 最新版へ更新中...</span>';
+      toastUpdateBtn.innerHTML = '<span>⏳ 更新中...</span>';
 
-      if (newWorkerWaiting) {
-        newWorkerWaiting.postMessage({ type: 'SKIP_WAITING' });
-      }
+      sessionStorage.setItem('pwa_just_updated', 'true');
 
-      // Purge all caches and reload to guarantee fresh assets
+      navigator.serviceWorker.getRegistration().then((reg) => {
+        if (reg && reg.waiting) {
+          reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+        }
+      });
+
+      // Force cache purge and reload to guarantee fresh assets
       setTimeout(() => {
         forceAppUpdate(toastUpdateBtn);
-      }, 250);
+      }, 200);
     });
   }
 
   if (toastDismissBtn) {
     toastDismissBtn.addEventListener('click', () => {
-      hideUpdateNotification();
+      const match = updateToastDesc ? updateToastDesc.textContent.match(/v\d+\.\d+\.\d+/) : null;
+      if (match) {
+        sessionStorage.setItem('pwa_dismissed_version', match[0]);
+      } else {
+        sessionStorage.setItem('pwa_dismissed_version', 'dismissed');
+      }
+      hideUpdateToast();
     });
   }
 
