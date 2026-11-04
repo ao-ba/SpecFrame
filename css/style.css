@@ -466,7 +466,7 @@ body {
 
 /* Control Dock (Right) */
 .control-dock {
-  width: 420px;
+  width: 440px;
   min-width: 380px;
   background: var(--bg-surface);
   display: flex;
@@ -484,26 +484,28 @@ body {
 }
 
 .tab-btn {
-  flex: 1;
+  flex: 1 1 auto;
   min-width: 0;
   padding: 12px 4px;
   background: none;
   border: none;
   border-bottom: 2px solid transparent;
   color: var(--text-muted);
-  font-size: 0.78rem;
+  font-size: 0.74rem;
   font-weight: 600;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 5px;
+  gap: 4px;
   white-space: nowrap;
   letter-spacing: -0.2px;
   transition: all var(--transition-fast);
 }
 
 .tab-btn svg {
+  width: 13px;
+  height: 13px;
   flex-shrink: 0;
 }
 

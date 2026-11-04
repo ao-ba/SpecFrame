@@ -1,6 +1,6 @@
 {
   "name": "specframe",
-  "version": "1.6.3",
+  "version": "1.6.4",
   "description": "写真のExifメタデータを読み取って美しいフレームやオーバーレイを付与するPWA Webアプリ",
   "main": "index.html",
   "scripts": {
