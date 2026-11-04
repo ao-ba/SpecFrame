@@ -28,7 +28,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&family=Playfair+Display:ital,wght@0,600;1,700&family=VT323&display=swap" rel="stylesheet">
 
   <!-- App Stylesheet -->
-  <link rel="stylesheet" href="./css/style.css?v=1.6.2">
+  <link rel="stylesheet" href="./css/style.css?v=1.6.3">
 </head>
 <body>
   <!-- PWA Update Notification Toast Banner -->
@@ -115,7 +115,7 @@
         </div>
 
         <div class="empty-state-footer">
-          <span class="app-version-badge">SpecFrame v1.6.2</span>
+          <span class="app-version-badge">SpecFrame v1.6.3</span>
           <span class="footer-divider">•</span>
           <button type="button" class="btn-refresh-cache" title="キャッシュを消去して最新版を取得">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
@@ -165,7 +165,7 @@
             <span style="font-size: 0.8rem; color: var(--text-muted);">
               💡 リアルタイムプレビュー中（ネイティブ高解像度書き出し対応）
             </span>
-            <span class="app-version-badge">v1.6.2</span>
+            <span class="app-version-badge">v1.6.3</span>
           </div>
 
           <div class="stage-bottombar-actions">
@@ -187,23 +187,23 @@
         <nav class="tabs-nav" role="tablist">
           <button type="button" class="tab-btn active" data-tab="tab-presets" role="tab" aria-selected="true">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-            プリセット
+            <span>プリセット</span>
           </button>
           <button type="button" class="tab-btn" data-tab="tab-style" role="tab" aria-selected="false">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m9.17 14.83-4.24 4.24"/></svg>
-            スタイル
+            <span>スタイル</span>
           </button>
           <button type="button" class="tab-btn" data-tab="tab-metadata" role="tab" aria-selected="false">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-            Exif情報
+            <span>Exif情報</span>
           </button>
           <button type="button" class="tab-btn" data-tab="tab-export" role="tab" aria-selected="false">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            書き出し
+            <span>書き出し</span>
           </button>
           <button type="button" class="tab-btn" data-tab="tab-other" role="tab" aria-selected="false">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
-            その他
+            <span>その他</span>
           </button>
         </nav>
 
@@ -606,7 +606,7 @@
                 <div class="other-card-header">
                   <div>
                     <span class="other-app-title">SpecFrame</span>
-                    <span class="app-version-badge">v1.6.2</span>
+                    <span class="app-version-badge">v1.6.3</span>
                   </div>
                   <span class="status-indicator">● 最新版稼働中</span>
                 </div>
@@ -669,9 +669,9 @@
 
   <!-- Vendor & Core Scripts -->
   <script src="./vendor/exifr.full.umd.js"></script>
-  <script src="./js/exif-service.js?v=1.6.2"></script>
-  <script src="./js/palette.js?v=1.6.2"></script>
-  <script src="./js/renderer.js?v=1.6.2"></script>
-  <script src="./js/app.js?v=1.6.2"></script>
+  <script src="./js/exif-service.js?v=1.6.3"></script>
+  <script src="./js/palette.js?v=1.6.3"></script>
+  <script src="./js/renderer.js?v=1.6.3"></script>
+  <script src="./js/app.js?v=1.6.3"></script>
 </body>
 </html>
