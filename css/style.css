@@ -84,7 +84,7 @@ body {
 .brand-logo-img {
   width: 34px;
   height: 34px;
-  border-radius: var(--radius-sm);
+  border-radius: 50%;
   box-shadow: var(--shadow-sm);
 }
 
