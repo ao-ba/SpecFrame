@@ -162,38 +162,34 @@ class FrameRenderer {
     const logoSize = Math.round(28 * scale * Math.min(1.4, Math.max(0.7, fontScale)));
     if (options.items.logo) {
       const logoBrand = this.resolveBrand(metadata, options.brandLogo);
-      this.drawBrandLogo(ctx, logoBrand, leftCursor, centerY, logoSize, textColor, options.accentColor);
+      this.drawBrandLogo(ctx, logoBrand, leftCursor + logoSize / 2, centerY, logoSize, textColor, options.accentColor);
       leftCursor += logoSize + Math.round(16 * scale);
     }
 
     const titleSize = Math.round(22 * scale * fontScale);
     const subtitleSize = Math.round(15 * scale * fontScale);
+    const lineGap = Math.round(7 * scale * fontScale);
 
     if (options.items.camera || options.items.lens) {
-      ctx.textAlign = 'left';
-      ctx.textBaseline = 'middle';
-
       const camText = options.items.camera ? (metadata.model || metadata.make || '') : '';
       const lensText = options.items.lens ? (metadata.lens || '') : '';
 
-      if (camText && lensText) {
-        ctx.font = `600 ${titleSize}px ${fontBase}`;
-        ctx.fillStyle = textColor;
-        ctx.fillText(camText, leftCursor, centerY - titleSize * 0.58);
-
-        ctx.font = `400 ${subtitleSize}px ${fontBase}`;
-        ctx.fillStyle = subtextColor;
-        ctx.fillText(lensText, leftCursor, centerY + subtitleSize * 0.72);
-      } else {
-        ctx.font = `600 ${titleSize}px ${fontBase}`;
-        ctx.fillStyle = textColor;
-        ctx.fillText(camText || lensText, leftCursor, centerY);
-      }
+      this.drawTextBlockCentered(ctx, {
+        line1: camText,
+        font1: `600 ${titleSize}px ${fontBase}`,
+        color1: textColor,
+        line2: lensText,
+        font2: `400 ${subtitleSize}px ${fontBase}`,
+        color2: subtextColor,
+        x: leftCursor,
+        centerY,
+        align: 'left',
+        gap: lineGap
+      });
     }
 
     // Right block: Exposure specs + Date/Author
     const rightCursor = photoX + croppedW - paddingX;
-    ctx.textAlign = 'right';
 
     const specTokens = [];
     if (options.items.focalLength && metadata.focalLength) specTokens.push(metadata.focalLength);
@@ -211,18 +207,19 @@ class FrameRenderer {
     if (options.items.location && metadata.location) sublineTokens.push(metadata.location);
     const subline = sublineTokens.join('  |  ');
 
-    if (specsLine && subline) {
-      ctx.font = `600 ${titleSize}px ${fontBase}`;
-      ctx.fillStyle = textColor;
-      ctx.fillText(specsLine, rightCursor, centerY - titleSize * 0.58);
-
-      ctx.font = `400 ${subtitleSize}px ${fontBase}`;
-      ctx.fillStyle = subtextColor;
-      ctx.fillText(subline, rightCursor, centerY + subtitleSize * 0.72);
-    } else if (specsLine || subline) {
-      ctx.font = `600 ${titleSize}px ${fontBase}`;
-      ctx.fillStyle = textColor;
-      ctx.fillText(specsLine || subline, rightCursor, centerY);
+    if (specsLine || subline) {
+      this.drawTextBlockCentered(ctx, {
+        line1: specsLine,
+        font1: `600 ${titleSize}px ${fontBase}`,
+        color1: textColor,
+        line2: subline,
+        font2: `400 ${subtitleSize}px ${fontBase}`,
+        color2: subtextColor,
+        x: rightCursor,
+        centerY,
+        align: 'right',
+        gap: lineGap
+      });
     }
 
     return this.canvas;
@@ -270,33 +267,36 @@ class FrameRenderer {
 
     // Center Hasselblad/Camera brand mark
     const centerY = barY + barH * 0.58;
-    ctx.textAlign = 'left';
-    ctx.textBaseline = 'middle';
 
     const fontScale = options.fontSizeScale !== undefined ? options.fontSizeScale : 1.3;
     let leftX = photoX + paddingX;
     if (options.items.logo) {
       const logoBrand = this.resolveBrand(metadata, options.brandLogo);
       const logoSize = Math.round(26 * scale * Math.min(1.4, Math.max(0.7, fontScale)));
-      this.drawBrandLogo(ctx, logoBrand, leftX, centerY, logoSize, textColor, accentColor);
+      this.drawBrandLogo(ctx, logoBrand, leftX + logoSize / 2, centerY, logoSize, textColor, accentColor);
       leftX += logoSize + Math.round(14 * scale);
     }
 
     const titleSize = Math.round(20 * scale * fontScale);
     const subSize = Math.round(13 * scale * fontScale);
+    const lineGap = Math.round(6 * scale * fontScale);
 
-    const modelName = options.items.camera ? (metadata.model || metadata.make || 'CAMERA') : '';
+    const modelName = options.items.camera ? (metadata.model || metadata.make || 'CAMERA').toUpperCase() : '';
     const lensName = options.items.lens ? (metadata.lens || '') : '';
 
-    ctx.font = `700 ${titleSize}px ${fontBase}`;
-    ctx.fillStyle = textColor;
-    ctx.letterSpacing = '1px';
-    ctx.fillText(modelName.toUpperCase(), leftX, centerY - titleSize * 0.55);
-
-    if (lensName) {
-      ctx.font = `400 ${subSize}px ${fontBase}`;
-      ctx.fillStyle = this.getMutedColor(textColor, 0.6);
-      ctx.fillText(lensName, leftX, centerY + subSize * 0.75);
+    if (modelName || lensName) {
+      this.drawTextBlockCentered(ctx, {
+        line1: modelName,
+        font1: `700 ${titleSize}px ${fontBase}`,
+        color1: textColor,
+        line2: lensName,
+        font2: `400 ${subSize}px ${fontBase}`,
+        color2: this.getMutedColor(textColor, 0.6),
+        x: leftX,
+        centerY,
+        align: 'left',
+        gap: lineGap
+      });
     }
 
     // Right: Technical exposure badge boxes
@@ -680,15 +680,13 @@ class FrameRenderer {
     ctx.restore();
 
     // Content inside card
+    const cardCenterY = cardY + cardH / 2;
     let textStartX = cardX + padX;
     if (options.items.logo) {
       const logoBrand = this.resolveBrand(metadata, options.brandLogo);
-      this.drawBrandLogo(ctx, logoBrand, textStartX + logoSize / 2, cardY + cardH / 2, logoSize, textColor, accentColor);
+      this.drawBrandLogo(ctx, logoBrand, textStartX + logoSize / 2, cardCenterY, logoSize, textColor, accentColor);
       textStartX += logoSize + Math.round(14 * scale);
     }
-
-    ctx.textAlign = 'left';
-    ctx.textBaseline = 'middle';
 
     ctx.save();
     if (options.textShadow) {
@@ -698,13 +696,18 @@ class FrameRenderer {
       ctx.shadowOffsetY = Math.round(1 * scale);
     }
 
-    ctx.font = `600 ${titleSize}px ${fontBase}`;
-    ctx.fillStyle = textColor;
-    ctx.fillText(titleLine, textStartX, cardY + padY + titleSize * 0.45);
-
-    ctx.font = `500 ${specSize}px ${fontBase}`;
-    ctx.fillStyle = this.getMutedColor(textColor, 0.82);
-    ctx.fillText(specsLine, textStartX, cardY + cardH - padY - specSize * 0.45);
+    this.drawTextBlockCentered(ctx, {
+      line1: titleLine,
+      font1: `600 ${titleSize}px ${fontBase}`,
+      color1: textColor,
+      line2: specsLine,
+      font2: `500 ${specSize}px ${fontBase}`,
+      color2: this.getMutedColor(textColor, 0.82),
+      x: textStartX,
+      centerY: cardCenterY,
+      align: 'left',
+      gap: Math.round(6 * scale * fontScale)
+    });
     ctx.restore();
 
     return this.canvas;
@@ -949,6 +952,90 @@ class FrameRenderer {
   }
 
   /**
+   * Draw 1- or 2-line text block such that its visual bounding box center
+   * aligns exactly with centerY (matching adjacent logo centerY).
+   */
+  drawTextBlockCentered(ctx, { line1, font1, color1, line2, font2, color2, x, centerY, align = 'left', gap = 6 }) {
+    ctx.save();
+    ctx.textAlign = align;
+    ctx.textBaseline = 'alphabetic';
+
+    if (!line1 && !line2) {
+      ctx.restore();
+      return;
+    }
+
+    if (!line2) {
+      ctx.font = font1;
+      ctx.fillStyle = color1;
+      const m1 = ctx.measureText(line1);
+      const asc1 = m1.actualBoundingBoxAscent || (parseFloat(font1.match(/(\d+(?:\.\d+)?)px/)?.[1] || 20) * 0.72);
+      const desc1 = m1.actualBoundingBoxDescent ?? 0;
+      const base1 = centerY + (asc1 - desc1) / 2;
+      ctx.fillText(line1, x, base1);
+      ctx.restore();
+      return;
+    }
+
+    if (!line1) {
+      ctx.font = font2;
+      ctx.fillStyle = color2;
+      const m2 = ctx.measureText(line2);
+      const asc2 = m2.actualBoundingBoxAscent || (parseFloat(font2.match(/(\d+(?:\.\d+)?)px/)?.[1] || 14) * 0.72);
+      const desc2 = m2.actualBoundingBoxDescent ?? 0;
+      const base2 = centerY + (asc2 - desc2) / 2;
+      ctx.fillText(line2, x, base2);
+      ctx.restore();
+      return;
+    }
+
+    ctx.font = font1;
+    const m1 = ctx.measureText(line1);
+    const asc1 = m1.actualBoundingBoxAscent || (parseFloat(font1.match(/(\d+(?:\.\d+)?)px/)?.[1] || 20) * 0.72);
+    const desc1 = m1.actualBoundingBoxDescent ?? 0;
+
+    ctx.font = font2;
+    const m2 = ctx.measureText(line2);
+    const asc2 = m2.actualBoundingBoxAscent || (parseFloat(font2.match(/(\d+(?:\.\d+)?)px/)?.[1] || 14) * 0.72);
+    const desc2 = m2.actualBoundingBoxDescent ?? 0;
+
+    const h1 = asc1 + desc1;
+    const h2 = asc2 + desc2;
+    const totalH = h1 + gap + h2;
+    const topY = centerY - totalH / 2;
+
+    const base1 = topY + asc1;
+    const base2 = topY + h1 + gap + asc2;
+
+    ctx.font = font1;
+    ctx.fillStyle = color1;
+    ctx.fillText(line1, x, base1);
+
+    ctx.font = font2;
+    ctx.fillStyle = color2;
+    ctx.fillText(line2, x, base2);
+
+    ctx.restore();
+  }
+
+  /**
+   * Draw a text glyph centered on (x, y) using its true visual bounding box
+   */
+  drawCenteredGlyph(ctx, text, x, y) {
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'alphabetic';
+    const m = ctx.measureText(text);
+    const asc = m.actualBoundingBoxAscent ?? 0;
+    const desc = m.actualBoundingBoxDescent ?? 0;
+    if (asc > 0 || desc > 0) {
+      ctx.fillText(text, x, y + (asc - desc) / 2);
+    } else {
+      ctx.textBaseline = 'middle';
+      ctx.fillText(text, x, y);
+    }
+  }
+
+  /**
    * Draw camera manufacturer vector logo / badge
    */
   drawBrandLogo(ctx, brand, x, y, size, color, accentColor) {
@@ -968,9 +1055,7 @@ class FrameRenderer {
         // White script "Leica" text
         ctx.fillStyle = '#FFFFFF';
         ctx.font = `italic 700 ${Math.round(size * 0.46)}px 'Playfair Display', serif`;
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText('Leica', 0, 0);
+        this.drawCenteredGlyph(ctx, 'Leica', 0, 0);
         break;
 
       case 'hasselblad':
@@ -983,38 +1068,34 @@ class FrameRenderer {
 
         ctx.font = `italic 700 ${Math.round(size * 0.58)}px serif`;
         ctx.fillStyle = accentColor || '#F59E0B';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText('H', 0, 0);
+        this.drawCenteredGlyph(ctx, 'H', 0, 0);
         break;
 
       case 'sony':
-        // Sony Alpha badge
+        // Sony Alpha badge - visually centered via actualBoundingBox
         ctx.fillStyle = '#FF5E36';
         ctx.font = `700 ${Math.round(size * 0.85)}px sans-serif`;
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText('α', 0, -size * 0.06);
+        this.drawCenteredGlyph(ctx, 'α', 0, 0);
         break;
 
-      case 'fujifilm':
-        // Fuji green/red dot badge
+      case 'fujifilm': {
+        // Fuji green/red dot badge centered on (0, 0)
         ctx.strokeStyle = color;
         ctx.lineWidth = Math.max(1, size * 0.06);
-        ctx.strokeRect(-r, -r * 0.6, size, size * 1.2);
+        const rectH = r * 1.25;
+        ctx.strokeRect(-r, -rectH / 2, size, rectH);
 
         ctx.fillStyle = '#E02424';
         ctx.beginPath();
-        ctx.arc(0, 0, r * 0.4, 0, Math.PI * 2);
+        ctx.arc(0, 0, r * 0.36, 0, Math.PI * 2);
         ctx.fill();
         break;
+      }
 
       case 'canon':
         ctx.font = `bold ${Math.round(size * 0.65)}px serif`;
         ctx.fillStyle = '#CC0000';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText('C', 0, 0);
+        this.drawCenteredGlyph(ctx, 'C', 0, 0);
         break;
 
       case 'nikon':
@@ -1023,38 +1104,32 @@ class FrameRenderer {
         ctx.fillRect(-r, -r, size, size);
         ctx.fillStyle = '#111111';
         ctx.font = `italic 800 ${Math.round(size * 0.65)}px sans-serif`;
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText('N', 0, 0);
+        this.drawCenteredGlyph(ctx, 'N', 0, 0);
         break;
 
       case 'apple':
         ctx.font = `${Math.round(size * 0.8)}px sans-serif`;
         ctx.fillStyle = color;
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText('', 0, 0);
+        this.drawCenteredGlyph(ctx, '', 0, 0);
         break;
 
       case 'lumix':
         ctx.font = `bold italic ${Math.round(size * 0.7)}px sans-serif`;
         ctx.fillStyle = '#E02424';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText('L', 0, 0);
+        this.drawCenteredGlyph(ctx, 'L', 0, 0);
         break;
 
-      case 'ricoh':
-        // Ricoh GR Red badge
+      case 'ricoh': {
+        // Ricoh GR Red badge centered on (0, 0)
         ctx.fillStyle = '#E02424';
-        this.roundedRect(ctx, -r, -r * 0.7, size, size * 1.4, size * 0.2);
+        const rectH = r * 1.35;
+        this.roundedRect(ctx, -r, -rectH / 2, size, rectH, size * 0.18);
         ctx.fill();
         ctx.fillStyle = '#FFFFFF';
-        ctx.font = `bold ${Math.round(size * 0.55)}px sans-serif`;
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText('GR', 0, 0);
+        ctx.font = `bold ${Math.round(size * 0.52)}px sans-serif`;
+        this.drawCenteredGlyph(ctx, 'GR', 0, 0);
         break;
+      }
 
       default:
         // Stylized vector camera aperture
