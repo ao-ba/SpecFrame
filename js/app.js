@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
       cornerRadius: 0,
       shadowEnabled: false,
       shadowBlur: 24,
+      textShadow: false,
       aspectRatio: 'original',
       brandLogo: 'auto',
       exportFormat: 'jpeg',
@@ -90,6 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const cornerRadiusVal = document.getElementById('corner-radius-val');
   const fontSizeScaleInput = document.getElementById('font-size-scale-input');
   const fontSizeScaleVal = document.getElementById('font-size-scale-val');
+  const textShadowToggle = document.getElementById('text-shadow-toggle');
   const resetStyleBtn = document.getElementById('reset-style-btn');
   const dragOverlay = document.getElementById('drag-overlay');
   const frameColorPicker = document.getElementById('frame-color-picker');
@@ -104,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ------------------------------------------------------------------
    * Service Worker & PWA Update Notification System
    * ------------------------------------------------------------------ */
-  const APP_VERSION = 'v1.6.4';
+  const APP_VERSION = 'v1.6.5';
   const pwaUpdateToast = document.getElementById('pwa-update-toast');
   const toastUpdateBtn = document.getElementById('toast-update-btn');
   const toastDismissBtn = document.getElementById('toast-dismiss-btn');
@@ -752,6 +754,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Text Drop Shadow Toggle
+  if (textShadowToggle) {
+    textShadowToggle.addEventListener('change', (e) => {
+      state.options.textShadow = e.target.checked;
+      renderCanvas();
+    });
+  }
+
   // Reset Style Button
   if (resetStyleBtn) {
     resetStyleBtn.addEventListener('click', () => {
@@ -759,6 +769,7 @@ document.addEventListener('DOMContentLoaded', () => {
       state.options.bottomBarScale = 1.0;
       state.options.cornerRadius = 0;
       state.options.fontSizeScale = 1.3;
+      state.options.textShadow = false;
       state.options.aspectRatio = 'original';
       state.options.brandLogo = 'auto';
 
@@ -766,6 +777,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (bottomBarScaleInput) { bottomBarScaleInput.value = 1.0; bottomBarScaleVal.textContent = '100%'; }
       if (cornerRadiusInput) { cornerRadiusInput.value = 0; cornerRadiusVal.textContent = '0px'; }
       if (fontSizeScaleInput) { fontSizeScaleInput.value = 1.3; fontSizeScaleVal.textContent = '130%'; }
+      if (textShadowToggle) { textShadowToggle.checked = false; }
       if (aspectRatioSelect) aspectRatioSelect.value = 'original';
       if (brandLogoSelect) brandLogoSelect.value = 'auto';
 

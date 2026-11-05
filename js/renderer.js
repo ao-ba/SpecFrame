@@ -28,6 +28,7 @@ class FrameRenderer {
       cornerRadius: 0,
       shadowEnabled: false,
       shadowBlur: 24,
+      textShadow: false,
       aspectRatio: 'original',
       brandLogo: 'auto',
       items: {
@@ -689,6 +690,14 @@ class FrameRenderer {
     ctx.textAlign = 'left';
     ctx.textBaseline = 'middle';
 
+    ctx.save();
+    if (options.textShadow) {
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.75)';
+      ctx.shadowBlur = Math.round(8 * scale);
+      ctx.shadowOffsetX = 0;
+      ctx.shadowOffsetY = Math.round(1 * scale);
+    }
+
     ctx.font = `600 ${titleSize}px ${fontBase}`;
     ctx.fillStyle = textColor;
     ctx.fillText(titleLine, textStartX, cardY + padY + titleSize * 0.45);
@@ -696,6 +705,7 @@ class FrameRenderer {
     ctx.font = `500 ${specSize}px ${fontBase}`;
     ctx.fillStyle = this.getMutedColor(textColor, 0.82);
     ctx.fillText(specsLine, textStartX, cardY + cardH - padY - specSize * 0.45);
+    ctx.restore();
 
     return this.canvas;
   }
@@ -739,10 +749,17 @@ class FrameRenderer {
     const specSize = Math.round(16 * scale * fontScale);
 
     ctx.save();
-    ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
-    ctx.shadowBlur = Math.round(12 * scale);
-    ctx.shadowOffsetX = 0;
-    ctx.shadowOffsetY = Math.round(2 * scale);
+    if (options.textShadow) {
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.85)';
+      ctx.shadowBlur = Math.round(12 * scale);
+      ctx.shadowOffsetX = 0;
+      ctx.shadowOffsetY = Math.round(2 * scale);
+    } else {
+      ctx.shadowColor = 'transparent';
+      ctx.shadowBlur = 0;
+      ctx.shadowOffsetX = 0;
+      ctx.shadowOffsetY = 0;
+    }
 
     ctx.textAlign = 'right';
     ctx.textBaseline = 'bottom';
