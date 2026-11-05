@@ -15,7 +15,7 @@
   <meta name="twitter:card" content="summary_large_image">
 
   <!-- PWA & Mobile Web App Meta -->
-  <meta name="theme-color" content="#121316">
+  <meta name="theme-color" content="#09090b">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <link rel="manifest" href="./manifest.webmanifest">
@@ -28,7 +28,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Cinzel:wght@600;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&family=Montserrat:wght@500;600;700&family=Playfair+Display:ital,wght@0,600;1,700&family=Shippori+Mincho:wght@500;700&family=Space+Grotesk:wght@500;700&family=VT323&display=swap" rel="stylesheet">
 
   <!-- App Stylesheet -->
-  <link rel="stylesheet" href="./css/style.css?v=1.6.7">
+  <link rel="stylesheet" href="./css/style.css?v=1.7.0">
 </head>
 <body>
   <!-- PWA Update Notification Toast Banner -->
@@ -57,24 +57,24 @@
     <div class="header-actions">
       <!-- Quick sample load pills -->
       <div class="sample-pills">
-        <span>サンプル写真:</span>
+        <span>サンプル:</span>
         <button type="button" id="sample-1-btn" class="btn btn-sm btn-pill" title="ダックスフンド (Sony α6700)">
-          🐕 ダックス
+          Sony α6700
         </button>
         <button type="button" id="sample-2-btn" class="btn btn-sm btn-pill" title="富士山朝焼け (FUJIFILM X-T5)">
-          🗻 富士山
+          FUJIFILM X-T5
         </button>
       </div>
 
       <!-- PWA Install Button (shown when available) -->
       <button type="button" id="pwa-install-btn" class="btn btn-sm" style="display: none;" title="アプリを端末にインストール">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
         <span>インストール</span>
       </button>
 
       <!-- GitHub Link -->
-      <a href="https://github.com/ao-ba/SpecFrame" target="_blank" rel="noopener noreferrer" class="btn btn-sm" title="GitHub リポジトリ">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+      <a href="https://github.com/ao-ba/SpecFrame" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-ghost" title="GitHub リポジトリ">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
       </a>
     </div>
   </header>
@@ -88,10 +88,10 @@
     <div id="drag-overlay" class="drag-overlay">
       <div class="drag-overlay-card">
         <div class="drag-overlay-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
         </div>
-        <span class="drag-overlay-title">新しい写真をドロップ</span>
-        <span class="drag-overlay-desc">ここにドロップすると即座に画像とExifが置き換わります</span>
+        <span class="drag-overlay-title">写真をドロップして開く</span>
+        <span class="drag-overlay-desc">画像とExif情報が即座に読み込まれます</span>
       </div>
     </div>
 
@@ -99,27 +99,27 @@
     <div id="empty-state" class="empty-state hidden">
       <div id="drop-zone" class="drop-card">
         <div class="drop-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
         </div>
-        <h2 class="drop-title">写真をドラッグ＆ドロップ</h2>
+        <h2 class="drop-title">写真を選択またはドロップ</h2>
         <p class="drop-desc">
-          またはクリックして画像を選択（JPEG, PNG, HEIC, TIFF等）<br>
-          ブラウザ内のみで処理されるため、サーバーに写真は送信されず安全です。
+          JPEG / PNG / HEIC / TIFF に対応<br>
+          すべての処理は端末内で完結し、外部へ送信されません
         </p>
-        <button type="button" class="btn btn-primary">写真ファイルを選択</button>
-        
+        <button type="button" class="btn btn-primary" style="margin-top: 4px; padding: 9px 20px;">ファイルを選択</button>
+
         <div class="drop-samples">
-          <span style="font-size: 0.8rem; color: var(--text-muted);">またはサンプルを試す:</span>
-          <button type="button" class="btn btn-sm btn-pill" onclick="document.getElementById('sample-1-btn').click();">🐕 ダックス (Sony)</button>
-          <button type="button" class="btn btn-sm btn-pill" onclick="document.getElementById('sample-2-btn').click();">🗻 富士山朝焼け (Fuji)</button>
+          <span style="font-size: 0.72rem; color: var(--text-muted);">サンプル:</span>
+          <button type="button" class="btn btn-sm btn-pill" onclick="document.getElementById('sample-1-btn').click();">Sony α6700 (Dog)</button>
+          <button type="button" class="btn btn-sm btn-pill" onclick="document.getElementById('sample-2-btn').click();">FUJIFILM X-T5 (Mt. Fuji)</button>
         </div>
 
         <div class="empty-state-footer">
-          <span class="app-version-badge">SpecFrame v1.6.6</span>
-          <span class="footer-divider">•</span>
+          <span class="app-version-badge">v1.6.6</span>
+          <span class="footer-divider">·</span>
           <button type="button" class="btn-refresh-cache" title="キャッシュを消去して最新版を取得">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
-            キャッシュ削除・最新版に更新
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+            キャッシュ更新
           </button>
         </div>
       </div>
@@ -135,8 +135,8 @@
           </div>
 
           <button type="button" id="change-photo-btn" class="btn btn-sm" title="別の写真を開く (Ctrl+O)">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-            写真変更
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            写真を変更
           </button>
         </div>
 
@@ -148,33 +148,32 @@
           <!-- Zoom & Reset Controller -->
           <div class="preview-zoom-bar" id="preview-zoom-bar" role="toolbar" aria-label="プレビュー拡大縮小操作">
             <button type="button" class="zoom-btn" id="zoom-out-btn" title="縮小" aria-label="縮小">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/></svg>
             </button>
             <button type="button" class="zoom-btn zoom-reset-btn" id="zoom-reset-btn" title="元の倍率に戻す (100%)" aria-label="元の倍率に戻す">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><polyline points="3 3 3 8 8 8"/></svg>
               <span id="zoom-level-text">100%</span>
             </button>
             <button type="button" class="zoom-btn" id="zoom-in-btn" title="拡大" aria-label="拡大">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             </button>
           </div>
         </div>
 
         <div class="stage-bottombar">
           <div class="stage-bottombar-info">
-            <span style="font-size: 0.8rem; color: var(--text-muted);">
-              💡 リアルタイムプレビュー中（ネイティブ高解像度書き出し対応）
+            <span style="font-size: 0.74rem; color: var(--text-muted);">
+              オリジナル解像度出力
             </span>
             <span class="app-version-badge">v1.6.6</span>
           </div>
 
           <div class="stage-bottombar-actions">
             <button type="button" id="copy-btn" class="btn btn-sm" title="クリップボードへコピー">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
               <span>クリップボード<span class="desktop-only-inline">へコピー</span></span>
             </button>
             <button type="button" id="download-btn" class="btn btn-sm btn-primary" title="画像を保存 (Ctrl+S)">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
               <span>画像を保存</span>
             </button>
           </div>
@@ -186,23 +185,23 @@
         <!-- Tabs Nav -->
         <nav class="tabs-nav" role="tablist">
           <button type="button" class="tab-btn active" data-tab="tab-presets" role="tab" aria-selected="true">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
             <span>プリセット</span>
           </button>
           <button type="button" class="tab-btn" data-tab="tab-style" role="tab" aria-selected="false">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m9.17 14.83-4.24 4.24"/></svg>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 3v18"/></svg>
             <span>スタイル</span>
           </button>
           <button type="button" class="tab-btn" data-tab="tab-metadata" role="tab" aria-selected="false">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
             <span>Exif情報</span>
           </button>
           <button type="button" class="tab-btn" data-tab="tab-export" role="tab" aria-selected="false">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             <span>書き出し</span>
           </button>
           <button type="button" class="tab-btn" data-tab="tab-other" role="tab" aria-selected="false">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
             <span>その他</span>
           </button>
         </nav>
@@ -212,82 +211,82 @@
           <!-- Tab 1: Presets -->
           <div id="tab-presets" class="tab-pane active" role="tabpanel">
             <div class="control-group">
-              <span class="control-label">フレーム・レイアウト選択</span>
+              <span class="control-label">レイアウト</span>
               <div class="presets-grid">
                 <!-- Preset 1 -->
                 <div class="preset-card active" data-preset="classic" id="preset-classic">
                   <div class="preset-thumbnail thumb-classic">
-                    <span style="font-size:0.6rem; font-weight:700;">LEICA LOOK</span>
+                    <span style="font-size:0.55rem; font-weight:600; letter-spacing:0.06em;">CLASSIC</span>
                   </div>
                   <div class="preset-info">
                     <span class="preset-name">クラシック展示</span>
-                    <span class="preset-desc">Leica風・下部バー</span>
+                    <span class="preset-desc">外枠・下部バー</span>
                   </div>
                 </div>
 
                 <!-- Preset 2 -->
                 <div class="preset-card" data-preset="hasselblad" id="preset-hasselblad">
                   <div class="preset-thumbnail thumb-hasselblad">
-                    <span style="font-size:0.6rem; color:#f59e0b; font-weight:700;">HASSELBLAD</span>
+                    <span style="font-size:0.55rem; font-weight:600; letter-spacing:0.06em;">TECHNICAL</span>
                   </div>
                   <div class="preset-info">
                     <span class="preset-name">中判テクニカル</span>
-                    <span class="preset-desc">数値バッジ・オレンジ線</span>
+                    <span class="preset-desc">数値バッジ・ライン</span>
                   </div>
                 </div>
 
                 <!-- Preset 3 -->
                 <div class="preset-card" data-preset="minimal" id="preset-minimal">
                   <div class="preset-thumbnail thumb-minimal">
-                    <span style="font-size:0.55rem; color:#555;">· · ·</span>
+                    <span style="font-size:0.55rem; letter-spacing:0.1em;">MINIMAL</span>
                   </div>
                   <div class="preset-info">
                     <span class="preset-name">極細ミニマル</span>
-                    <span class="preset-desc">ヘアライン・ドット区切り</span>
+                    <span class="preset-desc">スリム枠・1行構成</span>
                   </div>
                 </div>
 
                 <!-- Preset 4 -->
                 <div class="preset-card" data-preset="polaroid" id="preset-polaroid">
                   <div class="preset-thumbnail thumb-polaroid">
-                    <span style="font-size:0.6rem; font-family:'Caveat', cursive; color:#333;">Instant</span>
+                    <span style="font-size:0.65rem; font-family:'Caveat', cursive;">Instant</span>
                   </div>
                   <div class="preset-info">
                     <span class="preset-name">ポラロイド風</span>
-                    <span class="preset-desc">広い下枠・手書き風</span>
+                    <span class="preset-desc">ワイド下枠・サイン</span>
                   </div>
                 </div>
 
                 <!-- Preset 5 -->
                 <div class="preset-card" data-preset="cinema" id="preset-cinema">
                   <div class="preset-thumbnail thumb-cinema">
-                    <span style="font-size:0.55rem; color:#38bdf8; font-family:monospace;">CINEMA 2.39:1</span>
+                    <span style="font-size:0.52rem; font-family:var(--font-mono); letter-spacing:0.08em;">2.39:1</span>
                   </div>
                   <div class="preset-info">
                     <span class="preset-name">シネマスコープ</span>
-                    <span class="preset-desc">黒帯レターボックス</span>
+                    <span class="preset-desc">上下レターボックス</span>
                   </div>
                 </div>
 
                 <!-- Preset 6 -->
                 <div class="preset-card" data-preset="film" id="preset-film">
                   <div class="preset-thumbnail thumb-film">
-                    <span style="font-size:0.55rem; color:#f59e0b; font-family:monospace;">▶ 24A PORTRA</span>
+                    <span style="font-size:0.52rem; font-family:var(--font-mono);">▶ 24A</span>
                   </div>
                   <div class="preset-info">
-                    <span class="preset-name">35mmネガフィルム</span>
-                    <span class="preset-desc">パーフォレーション穴</span>
+                    <span class="preset-name">35mmフィルム</span>
+                    <span class="preset-desc">パーフォレーション</span>
                   </div>
                 </div>
 
                 <!-- Preset 7: In-Image Frosted Glass -->
                 <div class="preset-card" data-preset="overlay-glass" id="preset-overlay-glass">
                   <div class="preset-thumbnail thumb-overlay-glass">
-                    <div class="mini-pill">Exif Glass</div>
+                    <div class="mini-pill">Glass</div>
                   </div>
                   <div class="preset-info">
-                    <span class="preset-name">画像内ガラスバッジ</span>
-                    <span class="preset-desc">外枠なし・すりガラス</span>
+                    <span class="preset-name">ガラスバッジ</span>
+                    <span class="preset-desc">外枠なし・ピル型</span>
                   </div>
                 </div>
 
@@ -298,7 +297,7 @@
                   </div>
                   <div class="preset-info">
                     <span class="preset-name">クリーン透かし</span>
-                    <span class="preset-desc">写真上直接オーバーレイ</span>
+                    <span class="preset-desc">写真上テキストのみ</span>
                   </div>
                 </div>
 
@@ -308,8 +307,8 @@
                     <span>'24 10 18</span>
                   </div>
                   <div class="preset-info">
-                    <span class="preset-name">90sクォーツ日付</span>
-                    <span class="preset-desc">レトロ液晶アンバー印字</span>
+                    <span class="preset-name">クォーツ日付</span>
+                    <span class="preset-desc">レトロ液晶印字</span>
                   </div>
                 </div>
               </div>
@@ -318,17 +317,16 @@
 
           <!-- Tab 2: Style & Frame Customization -->
           <div id="tab-style" class="tab-pane" role="tabpanel">
-            <!-- Reset style button row -->
-            <div style="margin-bottom: 14px; display: flex; justify-content: flex-end;">
+            <div style="margin-bottom: 16px; display: flex; justify-content: flex-end;">
               <button type="button" id="reset-style-btn" class="btn btn-sm" title="現在のスタイルを初期状態に戻す">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
-                スタイルをデフォルトに戻す
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                初期設定に戻す
               </button>
             </div>
 
             <!-- Auto extracted color palette -->
             <div class="control-group">
-              <span class="control-label">写真から抽出した調和パレット</span>
+              <span class="control-label">抽出パレット</span>
               <div class="palette-chips-row" id="palette-chips">
                 <!-- Dynamically populated -->
               </div>
@@ -336,22 +334,22 @@
 
             <!-- Frame & Text Colors -->
             <div class="control-group">
-              <span class="control-label">カラー詳細設定</span>
+              <span class="control-label">カラー & タイポグラフィ</span>
               <div class="field-pair">
                 <div class="field-item">
-                  <span class="field-label">フレーム背景色</span>
+                  <span class="field-label">背景色</span>
                   <div class="color-input-wrapper">
                     <input type="color" id="frame-color-picker" value="#FFFFFF">
                   </div>
                 </div>
                 <div class="field-item">
-                  <span class="field-label">文字テキスト色</span>
+                  <span class="field-label">文字色</span>
                   <div class="color-input-wrapper">
                     <input type="color" id="text-color-picker" value="#111827">
                   </div>
                 </div>
               </div>
-              <div class="field-pair" style="margin-top: 10px;">
+              <div class="field-pair" style="margin-top: 8px;">
                 <div class="field-item">
                   <span class="field-label">アクセント色</span>
                   <div class="color-input-wrapper">
@@ -359,17 +357,17 @@
                   </div>
                 </div>
                 <div class="field-item">
-                  <span class="field-label">フォント種類</span>
+                  <span class="field-label">フォント</span>
                   <select id="font-family-select" class="form-select">
-                    <option value="sans">モダン・サンセリフ (Inter)</option>
-                    <option value="montserrat">モード・ジオメトリック (Montserrat)</option>
-                    <option value="cormorant">ラグジュアリー・セリフ (Cormorant)</option>
-                    <option value="serif">クラシック・セリフ (Playfair)</option>
-                    <option value="cinzel">シネマ・ローマン碑文 (Cinzel)</option>
-                    <option value="shippori">和モダン上質明朝 (しっぽり明朝)</option>
-                    <option value="grotesk">現代アート・グロテスク (Space Grotesk)</option>
-                    <option value="mono">テクニカル等幅 (JetBrains Mono)</option>
-                    <option value="handwriting">手書きサイン風 (Caveat)</option>
+                    <option value="sans">Inter (Sans)</option>
+                    <option value="montserrat">Montserrat (Geometric)</option>
+                    <option value="cormorant">Cormorant (Luxury Serif)</option>
+                    <option value="serif">Playfair (Classic Serif)</option>
+                    <option value="cinzel">Cinzel (Roman)</option>
+                    <option value="shippori">しっぽり明朝 (JP Serif)</option>
+                    <option value="grotesk">Space Grotesk</option>
+                    <option value="mono">JetBrains Mono</option>
+                    <option value="handwriting">Caveat (Script)</option>
                   </select>
                 </div>
               </div>
@@ -378,7 +376,7 @@
             <!-- Frame Sizing Sliders -->
             <div class="control-group">
               <div class="control-label">
-                <span>外枠の余白幅</span>
+                <span>外枠の余白</span>
                 <span id="border-scale-val" class="control-val">100%</span>
               </div>
               <input type="range" id="border-scale-input" min="0.2" max="2.0" step="0.05" value="1.0">
@@ -403,7 +401,7 @@
             <!-- Font Size Scale Slider -->
             <div class="control-group">
               <div class="control-label">
-                <span>文字サイズ (フォント倍率)</span>
+                <span>文字サイズ</span>
                 <span id="font-size-scale-val" class="control-val">130%</span>
               </div>
               <input type="range" id="font-size-scale-input" min="0.6" max="1.8" step="0.05" value="1.3">
@@ -411,44 +409,41 @@
 
             <!-- Text Drop Shadow Toggle -->
             <div class="control-group">
-              <span class="control-label">文字装飾・シャドウ</span>
+              <span class="control-label">文字エフェクト</span>
               <label class="checkbox-card" style="width: 100%;">
                 <input type="checkbox" id="text-shadow-toggle">
-                <span>文字にドロップシャドウ (影) を付ける</span>
+                <span>ドロップシャドウ（透かし文字の影）</span>
               </label>
-              <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 6px; padding-left: 2px;">
-                透かし文字などの背後に影を落とし、明るい背景での視認性を高めます（デフォルト: オフ）
-              </div>
             </div>
 
             <!-- Aspect Ratio -->
             <div class="control-group">
-              <span class="control-label">フレーム・アスペクト比</span>
+              <span class="control-label">アスペクト比</span>
               <select id="aspect-ratio-select" class="form-select">
-                <option value="original">写真オリジナル比率を維持</option>
-                <option value="1:1">1:1 正方形 (Instagram)</option>
-                <option value="4:5">4:5 縦長ポートレート</option>
-                <option value="3:2">3:2 伝統的35mm比率</option>
-                <option value="16:9">16:9 ワイドスクリーン</option>
-                <option value="9:16">9:16 ストーリーズ/リール</option>
+                <option value="original">オリジナル比率</option>
+                <option value="1:1">1:1 (正方形)</option>
+                <option value="4:5">4:5 (ポートレート)</option>
+                <option value="3:2">3:2 (35mmフィルム)</option>
+                <option value="16:9">16:9 (ワイド)</option>
+                <option value="9:16">9:16 (ストーリーズ)</option>
               </select>
             </div>
 
             <!-- Brand Logo Selection -->
             <div class="control-group">
-              <span class="control-label">カメラメーカー・ロゴ</span>
+              <span class="control-label">メーカーロゴ</span>
               <select id="brand-logo-select" class="form-select">
-                <option value="auto">Exifから自動判別</option>
-                <option value="leica">Leica (ライカ 赤丸バッジ)</option>
-                <option value="hasselblad">HASSELBLAD (ハッセルブラッド)</option>
-                <option value="sony">SONY (α アルファ)</option>
-                <option value="fujifilm">FUJIFILM (富士フイルム)</option>
-                <option value="canon">Canon (キヤノン)</option>
-                <option value="nikon">Nikon (ニコン)</option>
-                <option value="apple">Apple (iPhone )</option>
-                <option value="lumix">LUMIX (ルミックス)</option>
-                <option value="ricoh">RICOH GR (リコー)</option>
-                <option value="camera">汎用カメラアイコン</option>
+                <option value="auto">自動判別 (Exif)</option>
+                <option value="leica">Leica</option>
+                <option value="hasselblad">HASSELBLAD</option>
+                <option value="sony">SONY</option>
+                <option value="fujifilm">FUJIFILM</option>
+                <option value="canon">Canon</option>
+                <option value="nikon">Nikon</option>
+                <option value="apple">Apple</option>
+                <option value="lumix">LUMIX</option>
+                <option value="ricoh">RICOH GR</option>
+                <option value="camera">汎用アイコン</option>
               </select>
             </div>
           </div>
@@ -456,7 +451,7 @@
           <!-- Tab 3: Exif Metadata Items & Edit -->
           <div id="tab-metadata" class="tab-pane" role="tabpanel">
             <div class="control-group">
-              <span class="control-label">表示する項目</span>
+              <span class="control-label">表示項目</span>
               <div class="toggle-grid">
                 <label class="checkbox-card">
                   <input type="checkbox" class="item-toggle" data-item="camera" checked>
@@ -464,15 +459,15 @@
                 </label>
                 <label class="checkbox-card">
                   <input type="checkbox" class="item-toggle" data-item="lens" checked>
-                  <span>レンズ型番</span>
+                  <span>レンズ名</span>
                 </label>
                 <label class="checkbox-card">
                   <input type="checkbox" class="item-toggle" data-item="exposure" checked>
-                  <span>露出値 (F値・SS・ISO)</span>
+                  <span>露出 (F/SS/ISO)</span>
                 </label>
                 <label class="checkbox-card">
                   <input type="checkbox" class="item-toggle" data-item="focalLength" checked>
-                  <span>焦点距離 (mm)</span>
+                  <span>焦点距離</span>
                 </label>
                 <label class="checkbox-card">
                   <input type="checkbox" class="item-toggle" data-item="ev">
@@ -484,7 +479,7 @@
                 </label>
                 <label class="checkbox-card">
                   <input type="checkbox" class="item-toggle" data-item="author" checked>
-                  <span>作者/著作権</span>
+                  <span>作者クレジット</span>
                 </label>
                 <label class="checkbox-card">
                   <input type="checkbox" class="item-toggle" data-item="logo" checked>
@@ -495,19 +490,19 @@
 
             <!-- Manual Editor fields -->
             <div class="control-group">
-              <span class="control-label">メタデータの編集・補正</span>
+              <span class="control-label">テキスト編集</span>
               <div class="meta-fields-grid">
                 <div class="field-item">
-                  <span class="field-label">メーカー / Make</span>
-                  <input type="text" id="meta-make" class="form-input" placeholder="SONY, FUJIFILM, Canonなど">
+                  <span class="field-label">メーカー</span>
+                  <input type="text" id="meta-make" class="form-input" placeholder="SONY, FUJIFILM, Canon">
                 </div>
                 <div class="field-item">
-                  <span class="field-label">カメラ機種 / Model</span>
-                  <input type="text" id="meta-model" class="form-input" placeholder="Sony α7R IV, X-T5など">
+                  <span class="field-label">カメラ機種</span>
+                  <input type="text" id="meta-model" class="form-input" placeholder="Sony α7R IV, X-T5">
                 </div>
                 <div class="field-item">
-                  <span class="field-label">レンズ / Lens Model</span>
-                  <input type="text" id="meta-lens" class="form-input" placeholder="FE 35mm F1.4 GMなど">
+                  <span class="field-label">レンズ</span>
+                  <input type="text" id="meta-lens" class="form-input" placeholder="FE 35mm F1.4 GM">
                 </div>
 
                 <div class="field-pair">
@@ -523,7 +518,7 @@
 
                 <div class="field-pair">
                   <div class="field-item">
-                    <span class="field-label">シャッタースピード</span>
+                    <span class="field-label">シャッター速度</span>
                     <input type="text" id="meta-shutter" class="form-input" placeholder="1/160s">
                   </div>
                   <div class="field-item">
@@ -544,7 +539,7 @@
                 </div>
 
                 <div class="field-item">
-                  <span class="field-label">作者クレジット / サイン</span>
+                  <span class="field-label">作者クレジット</span>
                   <input type="text" id="meta-author" class="form-input" placeholder="Photo by Your Name">
                 </div>
 
@@ -560,37 +555,37 @@
           <div id="tab-export" class="tab-pane" role="tabpanel">
             <div class="export-card">
               <div class="export-card-title">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                高解像度フルクオリティ書き出し
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                ネイティブ高解像度出力
               </div>
               <p class="export-info-text">
-                アップロードされた写真の本来の解像度（4K、2400万〜6000万画素等）を損なわずにそのまま維持してレンダリング・保存します。
+                元画像のピクセル解像度を維持したままフレームを合成して書き出します。
               </p>
             </div>
 
             <div class="control-group">
-              <span class="control-label">保存フォーマット</span>
+              <span class="control-label">形式</span>
               <select id="export-format-select" class="form-select">
-                <option value="jpeg">JPEG (推奨・写真向け高品質)</option>
-                <option value="png">PNG (可逆圧縮・文字くっきり)</option>
+                <option value="jpeg">JPEG (写真向け・高画質)</option>
+                <option value="png">PNG (可逆圧縮・ロスレス)</option>
               </select>
             </div>
 
             <div class="control-group">
               <div class="control-label">
-                <span>JPEG圧縮品質</span>
+                <span>JPEG品質</span>
                 <span id="export-quality-val" class="control-val">92%</span>
               </div>
               <input type="range" id="export-quality-input" min="70" max="100" step="1" value="92">
             </div>
 
-            <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 24px;">
-              <button type="button" class="btn btn-primary" onclick="document.getElementById('download-btn').click();" style="width: 100%; padding: 12px;">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                高画質画像をダウンロード
+            <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 20px;">
+              <button type="button" class="btn btn-primary" onclick="document.getElementById('download-btn').click();" style="width: 100%; padding: 10px;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                画像を保存
               </button>
-              <button type="button" class="btn" onclick="document.getElementById('copy-btn').click();" style="width: 100%; padding: 10px;">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              <button type="button" class="btn" onclick="document.getElementById('copy-btn').click();" style="width: 100%; padding: 9px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
                 クリップボードへコピー
               </button>
             </div>
@@ -599,82 +594,76 @@
           <!-- Tab 5: Other & About -->
           <div id="tab-other" class="tab-pane" role="tabpanel">
             <div class="control-group">
-              <span class="control-label">サンプル写真を試す</span>
+              <span class="control-label">サンプル写真</span>
               <div class="other-section-card">
                 <p class="other-card-desc">
-                  Exifメタデータ付きの高画質サンプル写真を読み込んで、フレームの仕上がりをお試しいただけます。
+                  Exif情報付きのサンプル写真でレイアウトを確認できます。
                 </p>
-                <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px;">
-                  <button type="button" class="btn btn-sm" onclick="document.getElementById('sample-1-btn').click();" style="flex: 1; min-width: 130px; justify-content: center; padding: 10px; font-weight: 600;">
-                    🐕 ダックス (Sony α6700)
+                <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px;">
+                  <button type="button" class="btn btn-sm" onclick="document.getElementById('sample-1-btn').click();" style="flex: 1; min-width: 120px;">
+                    Sony α6700 (Dog)
                   </button>
-                  <button type="button" class="btn btn-sm" onclick="document.getElementById('sample-2-btn').click();" style="flex: 1; min-width: 130px; justify-content: center; padding: 10px; font-weight: 600;">
-                    🗻 富士山朝焼け (Fuji)
+                  <button type="button" class="btn btn-sm" onclick="document.getElementById('sample-2-btn').click();" style="flex: 1; min-width: 120px;">
+                    FUJIFILM X-T5 (Mt. Fuji)
                   </button>
                 </div>
               </div>
             </div>
 
             <div class="control-group">
-              <span class="control-label">バージョン＆キャッシュ管理</span>
-              
-              <!-- Version & Update Card -->
+              <span class="control-label">バージョン・キャッシュ</span>
               <div class="other-section-card">
                 <div class="other-card-header">
                   <div>
                     <span class="other-app-title">SpecFrame</span>
-                    <span class="app-version-badge">v1.6.7</span>
+                    <span class="app-version-badge">v1.7.0</span>
                   </div>
-                  <span class="status-indicator">● 最新版稼働中</span>
+                  <span class="status-indicator">● 最新版</span>
                 </div>
                 <p class="other-card-desc">
-                  Android や PWA で最新バージョンが反映されない場合は、下のボタンを押してください。キャッシュを消去して最新バージョンを読み直します。
+                  表示が古い場合はキャッシュを消去して再読み込みします。
                 </p>
-                <button type="button" class="btn btn-primary btn-refresh-cache" style="width: 100%; padding: 12px; font-weight: 600; justify-content: center; margin-top: 4px;">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
-                  キャッシュを削除して最新版に更新
+                <button type="button" class="btn btn-refresh-cache" style="width: 100%; padding: 9px; justify-content: center; margin-top: 2px;">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+                  キャッシュを削除して更新
                 </button>
               </div>
             </div>
 
             <div class="control-group">
-              <span class="control-label">PWA・オフライン機能</span>
+              <span class="control-label">システム仕様</span>
               <div class="other-section-card">
                 <div class="other-info-item">
-                  <span class="other-info-key">PWAオフライン対応</span>
-                  <span class="status-indicator">● 対応済み（ネット接続なしでも動作）</span>
+                  <span class="other-info-key">オフライン動作 (PWA)</span>
+                  <span class="status-indicator">対応済み</span>
                 </div>
                 <div class="other-info-item">
-                  <span class="other-info-key">プライバシー保護</span>
-                  <span style="font-size: 0.78rem; color: var(--text-secondary);">100% ブラウザ内完結（外部サーバーへの画像送信ゼロ）</span>
+                  <span class="other-info-key">プライバシー</span>
+                  <span class="status-indicator">ローカル処理完結（サーバー送信なし）</span>
                 </div>
               </div>
             </div>
 
             <div class="control-group">
-              <span class="control-label">ショートカットキー & Tips</span>
+              <span class="control-label">ショートカット</span>
               <div class="other-section-card">
                 <div class="shortcut-row">
-                  <span class="shortcut-desc">写真を開く / 変更</span>
+                  <span class="shortcut-desc">写真を開く</span>
                   <span class="shortcut-key">Ctrl + O</span>
                 </div>
                 <div class="shortcut-row">
                   <span class="shortcut-desc">画像を保存</span>
                   <span class="shortcut-key">Ctrl + S</span>
                 </div>
-                <div class="shortcut-row">
-                  <span class="shortcut-desc">ドラッグ＆ドロップ</span>
-                  <span style="font-size: 0.75rem; color: var(--text-secondary);">画面どこでも写真ファイルをドロップして入替可能</span>
-                </div>
               </div>
             </div>
 
             <div class="control-group">
-              <span class="control-label">リンク & ソースコード</span>
+              <span class="control-label">リポジトリ</span>
               <div class="other-section-card">
-                <a href="https://github.com/ao-ba/SpecFrame" target="_blank" rel="noopener noreferrer" class="btn btn-outline" style="width: 100%; justify-content: center; gap: 8px;">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-                  GitHub リポジトリ (ao-ba/SpecFrame)
+                <a href="https://github.com/ao-ba/SpecFrame" target="_blank" rel="noopener noreferrer" class="btn" style="width: 100%;">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                  GitHub (ao-ba/SpecFrame)
                 </a>
               </div>
             </div>
@@ -686,9 +675,9 @@
 
   <!-- Vendor & Core Scripts -->
   <script src="./vendor/exifr.full.umd.js"></script>
-  <script src="./js/exif-service.js?v=1.6.7"></script>
-  <script src="./js/palette.js?v=1.6.7"></script>
-  <script src="./js/renderer.js?v=1.6.7"></script>
-  <script src="./js/app.js?v=1.6.7"></script>
+  <script src="./js/exif-service.js?v=1.7.0"></script>
+  <script src="./js/palette.js?v=1.7.0"></script>
+  <script src="./js/renderer.js?v=1.7.0"></script>
+  <script src="./js/app.js?v=1.7.0"></script>
 </body>
 </html>
