@@ -107,7 +107,7 @@
         </div>
 
         <div class="empty-state-footer">
-          <span class="app-version-badge">v1.9.0</span>
+          <span class="app-version-badge">v1.9.1</span>
           <span class="footer-divider">·</span>
           <button type="button" class="btn-refresh-cache" title="キャッシュを消去して最新版を取得">
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
@@ -156,7 +156,7 @@
             <span style="font-size: 0.74rem; color: var(--text-muted);">
               オリジナル解像度出力
             </span>
-            <span class="app-version-badge">v1.9.0</span>
+            <span class="app-version-badge">v1.9.1</span>
           </div>
 
           <div class="stage-bottombar-actions">
@@ -439,6 +439,12 @@
 
               <!-- Controls when ratio is changed -->
               <div id="crop-controls-wrapper" class="crop-controls-wrapper" style="display: none;">
+                <!-- Drag Hint -->
+                <div class="crop-drag-hint">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 9l-3 3 3 3M9 5l3-3 3 3M15 19l-3 3-3-3M19 9l3 3-3 3M2 12h20M12 2v20"/></svg>
+                  <span>写真プレビューを直接ドラッグして位置を移動できます</span>
+                </div>
+
                 <!-- 3x3 Keypad -->
                 <div class="crop-alignment-container">
                   <div class="crop-grid-title">クイック位置指定</div>
@@ -676,7 +682,7 @@
                 <div class="other-card-header">
                   <div>
                     <span class="other-app-title">SpecFrame</span>
-                    <span class="app-version-badge">v1.9.0</span>
+                    <span class="app-version-badge">v1.9.1</span>
                   </div>
                   <span class="status-indicator">● 最新版</span>
                 </div>
@@ -735,9 +741,9 @@
 
   <!-- Vendor & Core Scripts -->
   <script src="./vendor/exifr.full.umd.js"></script>
-  <script src="./js/exif-service.js?v=1.9.0"></script>
-  <script src="./js/palette.js?v=1.9.0"></script>
-  <script src="./js/renderer.js?v=1.9.0"></script>
-  <script src="./js/app.js?v=1.9.0"></script>
+  <script src="./js/exif-service.js?v=1.9.1"></script>
+  <script src="./js/palette.js?v=1.9.1"></script>
+  <script src="./js/renderer.js?v=1.9.1"></script>
+  <script src="./js/app.js?v=1.9.1"></script>
 </body>
 </html>

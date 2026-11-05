@@ -123,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ------------------------------------------------------------------
    * Service Worker & PWA Update Notification System
    * ------------------------------------------------------------------ */
-  const APP_VERSION = 'v1.9.0';
+  const APP_VERSION = 'v1.9.1';
   const pwaUpdateToast = document.getElementById('pwa-update-toast');
   const toastUpdateBtn = document.getElementById('toast-update-btn');
   const toastDismissBtn = document.getElementById('toast-dismiss-btn');
@@ -609,6 +609,182 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
     }
+
+    updateCanvasCursor();
+  }
+
+  /* ------------------------------------------------------------------
+   * Interactive Direct Crop Drag Controller (Mouse & Touch)
+   * Allows dragging the photo directly inside the frame to adjust crop position
+   * ------------------------------------------------------------------ */
+  const cropDragState = {
+    isDragging: false,
+    dragStartX: 0,
+    dragStartY: 0,
+    initialCropX: 0,
+    initialCropY: 0,
+    overflowX: 0,
+    overflowY: 0,
+    canvasScale: 1
+  };
+
+  let cropRafId = null;
+
+  function getCropOverflow() {
+    if (!state.currentImage || state.options.aspectRatio === 'original') {
+      return { overflowX: 0, overflowY: 0, cropW: 0, cropH: 0, cropX: 0, cropY: 0, imgW: 0, imgH: 0 };
+    }
+    const imgW = state.currentImage.naturalWidth || state.currentImage.width;
+    const imgH = state.currentImage.naturalHeight || state.currentImage.height;
+    if (!imgW || !imgH) {
+      return { overflowX: 0, overflowY: 0, cropW: 0, cropH: 0, cropX: 0, cropY: 0, imgW: 0, imgH: 0 };
+    }
+
+    const crop = renderer.calculateCrop(imgW, imgH, state.options.aspectRatio, state.options.cropPositionX, state.options.cropPositionY);
+    return {
+      overflowX: Math.max(0, imgW - crop.w),
+      overflowY: Math.max(0, imgH - crop.h),
+      cropW: crop.w,
+      cropH: crop.h,
+      cropX: crop.x,
+      cropY: crop.y,
+      imgW,
+      imgH
+    };
+  }
+
+  function updateCanvasCursor() {
+    if (!canvasShadowWrapper) return;
+    if (zoomState.scale > 1.01) {
+      canvasShadowWrapper.classList.remove('can-crop-x', 'can-crop-y', 'can-crop-both', 'is-crop-dragging');
+      return;
+    }
+    const ov = getCropOverflow();
+    canvasShadowWrapper.classList.remove('can-crop-x', 'can-crop-y', 'can-crop-both');
+    if (ov.overflowX > 0 && ov.overflowY > 0) {
+      canvasShadowWrapper.classList.add('can-crop-both');
+    } else if (ov.overflowX > 0) {
+      canvasShadowWrapper.classList.add('can-crop-x');
+    } else if (ov.overflowY > 0) {
+      canvasShadowWrapper.classList.add('can-crop-y');
+    }
+  }
+
+  function updateHoverCursor(clientX, clientY) {
+    if (zoomState.scale > 1.01 || cropDragState.isDragging || zoomState.isDragging) return;
+    if (!previewCanvas || !previewContainer) return;
+
+    const canvasRect = previewCanvas.getBoundingClientRect();
+    const isOver = (
+      clientX >= canvasRect.left &&
+      clientX <= canvasRect.right &&
+      clientY >= canvasRect.top &&
+      clientY <= canvasRect.bottom
+    );
+
+    if (isOver) {
+      const ov = getCropOverflow();
+      if (ov.overflowX > 0 && ov.overflowY > 0) {
+        previewContainer.style.cursor = 'move';
+      } else if (ov.overflowX > 0) {
+        previewContainer.style.cursor = 'ew-resize';
+      } else if (ov.overflowY > 0) {
+        previewContainer.style.cursor = 'ns-resize';
+      } else {
+        previewContainer.style.cursor = 'default';
+      }
+    } else {
+      previewContainer.style.cursor = 'default';
+    }
+  }
+
+  function startCropDrag(clientX, clientY) {
+    if (zoomState.scale > 1.01) return false;
+    const ov = getCropOverflow();
+    if (ov.overflowX <= 0 && ov.overflowY <= 0) return false;
+    if (!previewCanvas) return false;
+
+    const canvasRect = previewCanvas.getBoundingClientRect();
+    const margin = 15;
+    if (
+      clientX < canvasRect.left - margin ||
+      clientX > canvasRect.right + margin ||
+      clientY < canvasRect.top - margin ||
+      clientY > canvasRect.bottom + margin
+    ) {
+      return false;
+    }
+
+    const canvasScale = previewCanvas.width / canvasRect.width;
+
+    cropDragState.isDragging = true;
+    cropDragState.dragStartX = clientX;
+    cropDragState.dragStartY = clientY;
+    cropDragState.initialCropX = ov.cropX;
+    cropDragState.initialCropY = ov.cropY;
+    cropDragState.overflowX = ov.overflowX;
+    cropDragState.overflowY = ov.overflowY;
+    cropDragState.canvasScale = canvasScale;
+
+    document.body.style.cursor = 'grabbing';
+    if (previewContainer) previewContainer.style.cursor = 'grabbing';
+    if (canvasShadowWrapper) canvasShadowWrapper.classList.add('is-crop-dragging');
+    return true;
+  }
+
+  function moveCropDrag(clientX, clientY) {
+    if (!cropDragState.isDragging) return;
+
+    const deltaX = clientX - cropDragState.dragStartX;
+    const deltaY = clientY - cropDragState.dragStartY;
+
+    let changed = false;
+
+    if (cropDragState.overflowX > 0) {
+      const deltaImageX = deltaX * cropDragState.canvasScale;
+      const targetCropX = Math.max(0, Math.min(cropDragState.overflowX, cropDragState.initialCropX - deltaImageX));
+      const newPosX = Math.round((targetCropX / cropDragState.overflowX) * 100);
+      if (newPosX !== state.options.cropPositionX) {
+        state.options.cropPositionX = newPosX;
+        changed = true;
+      }
+    }
+
+    if (cropDragState.overflowY > 0) {
+      const deltaImageY = deltaY * cropDragState.canvasScale;
+      const targetCropY = Math.max(0, Math.min(cropDragState.overflowY, cropDragState.initialCropY - deltaImageY));
+      const newPosY = Math.round((targetCropY / cropDragState.overflowY) * 100);
+      if (newPosY !== state.options.cropPositionY) {
+        state.options.cropPositionY = newPosY;
+        changed = true;
+      }
+    }
+
+    if (changed) {
+      if (!cropRafId) {
+        cropRafId = requestAnimationFrame(() => {
+          cropRafId = null;
+          syncCropUI();
+          renderCanvas();
+        });
+      }
+    }
+  }
+
+  function endCropDrag() {
+    if (cropDragState.isDragging) {
+      cropDragState.isDragging = false;
+      if (cropRafId) {
+        cancelAnimationFrame(cropRafId);
+        cropRafId = null;
+      }
+      syncCropUI();
+      renderCanvas();
+      document.body.style.cursor = '';
+      if (previewContainer) previewContainer.style.cursor = 'default';
+      if (canvasShadowWrapper) canvasShadowWrapper.classList.remove('is-crop-dragging');
+      updateCanvasCursor();
+    }
   }
 
   /* ------------------------------------------------------------------
@@ -761,8 +937,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Auto-fit display size so the complete frame is always fully visible with zero scrolling
     fitPreviewCanvas();
+    updateCanvasCursor();
     requestAnimationFrame(() => {
       fitPreviewCanvas();
+      updateCanvasCursor();
     });
   }
 
@@ -1300,6 +1478,10 @@ document.addEventListener('DOMContentLoaded', () => {
           zoomState.initialPanX = zoomState.panX;
           zoomState.initialPanY = zoomState.panY;
           if (canvasShadowWrapper) canvasShadowWrapper.classList.add('is-dragging');
+        } else if (zoomState.scale <= 1.01) {
+          if (startCropDrag(e.touches[0].clientX, e.touches[0].clientY)) {
+            e.preventDefault();
+          }
         }
       }
     }, { passive: false });
@@ -1333,6 +1515,9 @@ document.addEventListener('DOMContentLoaded', () => {
         zoomState.panX = zoomState.initialPanX + deltaX;
         zoomState.panY = zoomState.initialPanY + deltaY;
         updateZoomTransform(false);
+      } else if (e.touches.length === 1 && cropDragState.isDragging) {
+        e.preventDefault();
+        moveCropDrag(e.touches[0].clientX, e.touches[0].clientY);
       }
     }, { passive: false });
 
@@ -1340,6 +1525,9 @@ document.addEventListener('DOMContentLoaded', () => {
       if (zoomState.isDragging) {
         zoomState.isDragging = false;
         if (canvasShadowWrapper) canvasShadowWrapper.classList.remove('is-dragging');
+      }
+      if (cropDragState.isDragging) {
+        endCropDrag();
       }
       if (e.touches.length === 0) {
         zoomState.initialPinchDist = 0;
@@ -1355,10 +1543,13 @@ document.addEventListener('DOMContentLoaded', () => {
       zoomState.isDragging = false;
       zoomState.initialPinchDist = 0;
       if (canvasShadowWrapper) canvasShadowWrapper.classList.remove('is-dragging');
+      if (cropDragState.isDragging) {
+        endCropDrag();
+      }
       updateZoomTransform(true);
     });
 
-    // Mouse Drag Pan for Desktop
+    // Mouse Drag Pan for Desktop & Direct Crop Drag
     previewContainer.addEventListener('mousedown', (e) => {
       if (e.target.closest('#preview-zoom-bar')) return;
       if (zoomState.scale > 1.01 && e.button === 0) {
@@ -1369,17 +1560,27 @@ document.addEventListener('DOMContentLoaded', () => {
         zoomState.initialPanX = zoomState.panX;
         zoomState.initialPanY = zoomState.panY;
         if (canvasShadowWrapper) canvasShadowWrapper.classList.add('is-dragging');
+      } else if (zoomState.scale <= 1.01 && e.button === 0) {
+        if (startCropDrag(e.clientX, e.clientY)) {
+          e.preventDefault();
+        }
       }
     });
 
     window.addEventListener('mousemove', (e) => {
-      if (!zoomState.isDragging) return;
-      e.preventDefault();
-      const deltaX = e.clientX - zoomState.dragStartX;
-      const deltaY = e.clientY - zoomState.dragStartY;
-      zoomState.panX = zoomState.initialPanX + deltaX;
-      zoomState.panY = zoomState.initialPanY + deltaY;
-      updateZoomTransform(false);
+      if (zoomState.isDragging) {
+        e.preventDefault();
+        const deltaX = e.clientX - zoomState.dragStartX;
+        const deltaY = e.clientY - zoomState.dragStartY;
+        zoomState.panX = zoomState.initialPanX + deltaX;
+        zoomState.panY = zoomState.initialPanY + deltaY;
+        updateZoomTransform(false);
+      } else if (cropDragState.isDragging) {
+        e.preventDefault();
+        moveCropDrag(e.clientX, e.clientY);
+      } else {
+        updateHoverCursor(e.clientX, e.clientY);
+      }
     });
 
     window.addEventListener('mouseup', () => {
@@ -1387,6 +1588,15 @@ document.addEventListener('DOMContentLoaded', () => {
         zoomState.isDragging = false;
         if (canvasShadowWrapper) canvasShadowWrapper.classList.remove('is-dragging');
         updateZoomTransform(true);
+      }
+      if (cropDragState.isDragging) {
+        endCropDrag();
+      }
+    });
+
+    previewContainer.addEventListener('mouseleave', () => {
+      if (!cropDragState.isDragging && zoomState.scale <= 1.01) {
+        previewContainer.style.cursor = 'default';
       }
     });
 

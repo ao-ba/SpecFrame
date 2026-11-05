@@ -391,6 +391,22 @@ body {
   cursor: grabbing;
 }
 
+.canvas-shadow-wrapper.can-crop-x {
+  cursor: ew-resize;
+}
+
+.canvas-shadow-wrapper.can-crop-y {
+  cursor: ns-resize;
+}
+
+.canvas-shadow-wrapper.can-crop-both {
+  cursor: move;
+}
+
+.canvas-shadow-wrapper.is-crop-dragging {
+  cursor: grabbing !important;
+}
+
 #preview-canvas {
   display: block;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.65);
@@ -899,6 +915,24 @@ input[type="range"]::-webkit-slider-thumb:hover {
   background: var(--bg-input);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-sm);
+}
+
+.crop-drag-hint {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xs);
+  padding: 6px 8px;
+  line-height: 1.35;
+}
+
+.crop-drag-hint svg {
+  flex-shrink: 0;
+  color: var(--text-primary);
 }
 
 .crop-alignment-container {
