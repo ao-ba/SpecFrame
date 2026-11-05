@@ -107,7 +107,7 @@
         </div>
 
         <div class="empty-state-footer">
-          <span class="app-version-badge">v1.6.6</span>
+          <span class="app-version-badge">v1.8.0</span>
           <span class="footer-divider">·</span>
           <button type="button" class="btn-refresh-cache" title="キャッシュを消去して最新版を取得">
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
@@ -156,17 +156,21 @@
             <span style="font-size: 0.74rem; color: var(--text-muted);">
               オリジナル解像度出力
             </span>
-            <span class="app-version-badge">v1.6.6</span>
+            <span class="app-version-badge">v1.8.0</span>
           </div>
 
           <div class="stage-bottombar-actions">
+            <button type="button" id="share-btn" class="btn btn-sm" title="生成したフレーム画像を共有 (Web Share API)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+              <span>共有</span>
+            </button>
             <button type="button" id="copy-btn" class="btn btn-sm" title="クリップボードへコピー">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-              <span>クリップボード<span class="desktop-only-inline">へコピー</span></span>
+              <span>コピー</span>
             </button>
             <button type="button" id="download-btn" class="btn btn-sm btn-primary" title="画像を保存 (Ctrl+S)">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-              <span>画像を保存</span>
+              <span>保存</span>
             </button>
           </div>
         </div>
@@ -576,6 +580,10 @@
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                 画像を保存
               </button>
+              <button type="button" class="btn" onclick="document.getElementById('share-btn').click();" style="width: 100%; padding: 9px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                画像を共有
+              </button>
               <button type="button" class="btn" onclick="document.getElementById('copy-btn').click();" style="width: 100%; padding: 9px;">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
                 クリップボードへコピー
@@ -608,7 +616,7 @@
                 <div class="other-card-header">
                   <div>
                     <span class="other-app-title">SpecFrame</span>
-                    <span class="app-version-badge">v1.6.7</span>
+                    <span class="app-version-badge">v1.8.0</span>
                   </div>
                   <span class="status-indicator">● 最新版</span>
                 </div>
@@ -667,9 +675,9 @@
 
   <!-- Vendor & Core Scripts -->
   <script src="./vendor/exifr.full.umd.js"></script>
-  <script src="./js/exif-service.js?v=1.6.7"></script>
-  <script src="./js/palette.js?v=1.6.7"></script>
-  <script src="./js/renderer.js?v=1.6.7"></script>
-  <script src="./js/app.js?v=1.6.7"></script>
+  <script src="./js/exif-service.js?v=1.8.0"></script>
+  <script src="./js/palette.js?v=1.8.0"></script>
+  <script src="./js/renderer.js?v=1.8.0"></script>
+  <script src="./js/app.js?v=1.8.0"></script>
 </body>
 </html>

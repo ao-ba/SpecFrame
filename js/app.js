@@ -54,6 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const activeWorkspace = document.getElementById('active-workspace');
   const downloadBtn = document.getElementById('download-btn');
   const copyBtn = document.getElementById('copy-btn');
+  const shareBtn = document.getElementById('share-btn');
   const pwaInstallBtn = document.getElementById('pwa-install-btn');
   const resolutionBadge = document.getElementById('resolution-badge');
   const paletteChipsContainer = document.getElementById('palette-chips');
@@ -106,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ------------------------------------------------------------------
    * Service Worker & PWA Update Notification System
    * ------------------------------------------------------------------ */
-  const APP_VERSION = 'v1.7.0';
+  const APP_VERSION = 'v1.8.0';
   const pwaUpdateToast = document.getElementById('pwa-update-toast');
   const toastUpdateBtn = document.getElementById('toast-update-btn');
   const toastDismissBtn = document.getElementById('toast-dismiss-btn');
@@ -932,6 +933,88 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error('Copy failed:', err);
         alert('クリップボードへのコピーに失敗しました');
       }
+    });
+  }
+
+  // Web Share Action (Share image directly to other apps / SNS)
+  if (shareBtn) {
+    shareBtn.addEventListener('click', async () => {
+      if (!state.currentImage) return;
+
+      const format = state.options.exportFormat || 'jpeg';
+      const mimeType = format === 'png' ? 'image/png' : 'image/jpeg';
+      const quality = state.options.exportQuality || 0.92;
+      const ext = format === 'png' ? 'png' : 'jpg';
+      const makeStr = (state.metadata.model || state.metadata.make || 'photo').replace(/[^a-zA-Z0-9_-]/g, '_');
+      const filename = `SpecFrame_${makeStr}_${Date.now()}.${ext}`;
+
+      const originalHtml = shareBtn.innerHTML;
+      shareBtn.disabled = true;
+
+      previewCanvas.toBlob(async (blob) => {
+        if (!blob) {
+          shareBtn.disabled = false;
+          return;
+        }
+
+        try {
+          const file = new File([blob], filename, { type: mimeType });
+          const shareData = {
+            files: [file],
+            title: 'SpecFrame Photo',
+            text: `${state.metadata.model || 'SpecFrame'} で作成したフレーム付き写真`
+          };
+
+          // 1. Try Native Web Share with file attachment
+          if (navigator.canShare && navigator.canShare(shareData)) {
+            await navigator.share(shareData);
+            shareBtn.innerHTML = '<span>✓ 共有完了</span>';
+            setTimeout(() => {
+              shareBtn.innerHTML = originalHtml;
+              shareBtn.disabled = false;
+            }, 1800);
+            return;
+          }
+
+          // 2. Fallback: try sharing text / URL if files cannot be shared
+          if (navigator.share) {
+            await navigator.share({
+              title: 'SpecFrame',
+              text: `${state.metadata.model || 'SpecFrame'} で作成したフレーム写真`,
+              url: window.location.href
+            });
+            shareBtn.innerHTML = originalHtml;
+            shareBtn.disabled = false;
+            return;
+          }
+
+          // 3. Fallback on Desktop without Web Share: auto copy image to clipboard
+          if (navigator.clipboard && navigator.clipboard.write) {
+            await navigator.clipboard.write([
+              new ClipboardItem({ 'image/png': blob })
+            ]);
+            shareBtn.innerHTML = '<span>✓ 画像コピー済</span>';
+            setTimeout(() => {
+              shareBtn.innerHTML = originalHtml;
+              shareBtn.disabled = false;
+            }, 2000);
+            return;
+          }
+
+          // 4. Ultimate fallback: download
+          if (downloadBtn) downloadBtn.click();
+          shareBtn.innerHTML = originalHtml;
+          shareBtn.disabled = false;
+        } catch (err) {
+          if (err.name !== 'AbortError') {
+            console.error('Share failed:', err);
+            // Fallback to clipboard or download on unexpected share failure
+            if (copyBtn) copyBtn.click();
+          }
+          shareBtn.innerHTML = originalHtml;
+          shareBtn.disabled = false;
+        }
+      }, mimeType, quality);
     });
   }
 
