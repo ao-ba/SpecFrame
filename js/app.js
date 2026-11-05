@@ -27,6 +27,8 @@ document.addEventListener('DOMContentLoaded', () => {
       shadowBlur: 24,
       textShadow: false,
       aspectRatio: 'original',
+      cropPositionX: 50,
+      cropPositionY: 50,
       brandLogo: 'auto',
       exportFormat: 'jpeg',
       exportQuality: 0.92,
@@ -100,6 +102,20 @@ document.addEventListener('DOMContentLoaded', () => {
   const accentColorPicker = document.getElementById('accent-color-picker');
   const fontFamilySelect = document.getElementById('font-family-select');
   const aspectRatioSelect = document.getElementById('aspect-ratio-select');
+  const cropPositionSection = document.getElementById('crop-position-section');
+  const cropStatusBadge = document.getElementById('crop-status-badge');
+  const cropNotice = document.getElementById('crop-notice');
+  const cropControlsWrapper = document.getElementById('crop-controls-wrapper');
+  const cropAxisXGroup = document.getElementById('crop-axis-x-group');
+  const cropAxisYGroup = document.getElementById('crop-axis-y-group');
+  const cropHintX = document.getElementById('crop-hint-x');
+  const cropHintY = document.getElementById('crop-hint-y');
+  const cropPosXInput = document.getElementById('crop-pos-x-input');
+  const cropPosXVal = document.getElementById('crop-pos-x-val');
+  const cropPosYInput = document.getElementById('crop-pos-y-input');
+  const cropPosYVal = document.getElementById('crop-pos-y-val');
+  const cropPresetBtns = document.querySelectorAll('.crop-preset-btn');
+  const cropAlignBtns = document.querySelectorAll('.crop-align-btn');
   const exportFormatSelect = document.getElementById('export-format-select');
   const exportQualityInput = document.getElementById('export-quality-input');
   const exportQualityVal = document.getElementById('export-quality-val');
@@ -107,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ------------------------------------------------------------------
    * Service Worker & PWA Update Notification System
    * ------------------------------------------------------------------ */
-  const APP_VERSION = 'v1.8.0';
+  const APP_VERSION = 'v1.9.0';
   const pwaUpdateToast = document.getElementById('pwa-update-toast');
   const toastUpdateBtn = document.getElementById('toast-update-btn');
   const toastDismissBtn = document.getElementById('toast-dismiss-btn');
@@ -332,6 +348,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Populate form fields
       syncMetadataForm();
+      syncCropUI();
 
       // Adjust defaults based on preset
       applyPresetStyles(state.options.preset);
@@ -450,6 +467,148 @@ document.addEventListener('DOMContentLoaded', () => {
     if (textColorPicker) textColorPicker.value = state.options.textColor;
     if (accentColorPicker) accentColorPicker.value = state.options.accentColor;
     if (fontFamilySelect) fontFamilySelect.value = state.options.fontFamily;
+  }
+
+  function syncCropUI() {
+    if (!cropPositionSection) return;
+
+    const ratio = state.options.aspectRatio || 'original';
+    const isOriginal = ratio === 'original';
+
+    if (isOriginal) {
+      if (cropNotice) {
+        cropNotice.style.display = 'block';
+        cropNotice.textContent = 'オリジナル比率では写真全体が表示されます。アスペクト比を変更すると枠内のトリミング位置を自由に調整できます。';
+      }
+      if (cropControlsWrapper) cropControlsWrapper.style.display = 'none';
+      if (cropStatusBadge) {
+        cropStatusBadge.textContent = 'オリジナル比率';
+        cropStatusBadge.classList.remove('is-active');
+      }
+      return;
+    }
+
+    if (cropNotice) cropNotice.style.display = 'none';
+    if (cropControlsWrapper) cropControlsWrapper.style.display = 'flex';
+
+    // Determine which axis is cropped based on image and ratio
+    let hasXOverflow = false;
+    let hasYOverflow = false;
+
+    if (state.currentImage) {
+      const imgW = state.currentImage.naturalWidth || state.currentImage.width;
+      const imgH = state.currentImage.naturalHeight || state.currentImage.height;
+
+      let targetRatio = imgW / imgH;
+      if (ratio === '1:1') targetRatio = 1;
+      else if (ratio === '4:5') targetRatio = 4 / 5;
+      else if (ratio === '16:9') targetRatio = 16 / 9;
+      else if (ratio === '3:2') targetRatio = 3 / 2;
+      else if (ratio === '9:16') targetRatio = 9 / 16;
+
+      const currentRatio = imgW / imgH;
+      if (currentRatio > targetRatio + 0.001) {
+        hasXOverflow = true;
+      } else if (currentRatio < targetRatio - 0.001) {
+        hasYOverflow = true;
+      }
+    } else {
+      // If no image loaded yet, allow both axes
+      hasXOverflow = true;
+      hasYOverflow = true;
+    }
+
+    if (cropStatusBadge) {
+      if (hasXOverflow && !hasYOverflow) {
+        cropStatusBadge.textContent = '横位置で調整中';
+        cropStatusBadge.classList.add('is-active');
+      } else if (hasYOverflow && !hasXOverflow) {
+        cropStatusBadge.textContent = '縦位置で調整中';
+        cropStatusBadge.classList.add('is-active');
+      } else if (!hasXOverflow && !hasYOverflow) {
+        cropStatusBadge.textContent = '比率一致 (クロップなし)';
+        cropStatusBadge.classList.remove('is-active');
+      } else {
+        cropStatusBadge.textContent = '位置調整可能';
+        cropStatusBadge.classList.add('is-active');
+      }
+    }
+
+    if (cropAxisXGroup) {
+      if (hasXOverflow) {
+        cropAxisXGroup.classList.add('is-effective');
+        cropAxisXGroup.classList.remove('is-ineffective');
+        if (cropHintX) cropHintX.textContent = '（有効）';
+        if (cropPosXInput) cropPosXInput.disabled = false;
+      } else {
+        cropAxisXGroup.classList.remove('is-effective');
+        cropAxisXGroup.classList.add('is-ineffective');
+        if (cropHintX) cropHintX.textContent = '（この比率では余白なし）';
+        if (cropPosXInput) cropPosXInput.disabled = true;
+      }
+    }
+
+    if (cropAxisYGroup) {
+      if (hasYOverflow) {
+        cropAxisYGroup.classList.add('is-effective');
+        cropAxisYGroup.classList.remove('is-ineffective');
+        if (cropHintY) cropHintY.textContent = '（有効）';
+        if (cropPosYInput) cropPosYInput.disabled = false;
+      } else {
+        cropAxisYGroup.classList.remove('is-effective');
+        cropAxisYGroup.classList.add('is-ineffective');
+        if (cropHintY) cropHintY.textContent = '（この比率では余白なし）';
+        if (cropPosYInput) cropPosYInput.disabled = true;
+      }
+    }
+
+    const posX = typeof state.options.cropPositionX === 'number' ? state.options.cropPositionX : 50;
+    const posY = typeof state.options.cropPositionY === 'number' ? state.options.cropPositionY : 50;
+
+    if (cropPosXInput) cropPosXInput.value = posX;
+    if (cropPosYInput) cropPosYInput.value = posY;
+
+    if (cropPosXVal) {
+      cropPosXVal.textContent = posX === 50 ? '中央 (50%)' : (posX < 50 ? `左寄り (${posX}%)` : `右寄り (${posX}%)`);
+    }
+    if (cropPosYVal) {
+      cropPosYVal.textContent = posY === 50 ? '中央 (50%)' : (posY < 50 ? `上寄り (${posY}%)` : `下寄り (${posY}%)`);
+    }
+
+    // Update preset buttons
+    if (cropPresetBtns) {
+      cropPresetBtns.forEach((btn) => {
+        const axis = btn.dataset.axis;
+        const val = Number(btn.dataset.val);
+        const currentVal = axis === 'x' ? posX : posY;
+        if (val === currentVal) {
+          btn.classList.add('is-active');
+        } else {
+          btn.classList.remove('is-active');
+        }
+      });
+    }
+
+    // Update 3x3 align grid buttons
+    if (cropAlignBtns) {
+      cropAlignBtns.forEach((btn) => {
+        const bx = Number(btn.dataset.x);
+        const by = Number(btn.dataset.y);
+        let matches = false;
+        if (hasXOverflow && !hasYOverflow) {
+          matches = (bx === posX);
+        } else if (hasYOverflow && !hasXOverflow) {
+          matches = (by === posY);
+        } else {
+          matches = (bx === posX && by === posY);
+        }
+        if (matches) {
+          btn.classList.add('is-active');
+        } else {
+          btn.classList.remove('is-active');
+        }
+      });
+    }
   }
 
   /* ------------------------------------------------------------------
@@ -772,6 +931,8 @@ document.addEventListener('DOMContentLoaded', () => {
       state.options.fontSizeScale = 1.3;
       state.options.textShadow = false;
       state.options.aspectRatio = 'original';
+      state.options.cropPositionX = 50;
+      state.options.cropPositionY = 50;
       state.options.brandLogo = 'auto';
 
       if (borderScaleInput) { borderScaleInput.value = 1.0; borderScaleVal.textContent = '100%'; }
@@ -782,6 +943,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (aspectRatioSelect) aspectRatioSelect.value = 'original';
       if (brandLogoSelect) brandLogoSelect.value = 'auto';
 
+      syncCropUI();
       applyPresetStyles(state.options.preset);
       renderCanvas();
     });
@@ -824,7 +986,54 @@ document.addEventListener('DOMContentLoaded', () => {
   if (aspectRatioSelect) {
     aspectRatioSelect.addEventListener('change', (e) => {
       state.options.aspectRatio = e.target.value;
+      syncCropUI();
       renderCanvas();
+    });
+  }
+
+  // Crop Position Sliders & Buttons
+  if (cropPosXInput) {
+    cropPosXInput.addEventListener('input', (e) => {
+      state.options.cropPositionX = Number(e.target.value);
+      syncCropUI();
+      renderCanvas();
+    });
+  }
+
+  if (cropPosYInput) {
+    cropPosYInput.addEventListener('input', (e) => {
+      state.options.cropPositionY = Number(e.target.value);
+      syncCropUI();
+      renderCanvas();
+    });
+  }
+
+  if (cropPresetBtns && cropPresetBtns.length > 0) {
+    cropPresetBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const axis = btn.dataset.axis;
+        const val = Number(btn.dataset.val);
+        if (axis === 'x') {
+          state.options.cropPositionX = val;
+        } else if (axis === 'y') {
+          state.options.cropPositionY = val;
+        }
+        syncCropUI();
+        renderCanvas();
+      });
+    });
+  }
+
+  if (cropAlignBtns && cropAlignBtns.length > 0) {
+    cropAlignBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const x = Number(btn.dataset.x);
+        const y = Number(btn.dataset.y);
+        state.options.cropPositionX = x;
+        state.options.cropPositionY = y;
+        syncCropUI();
+        renderCanvas();
+      });
     });
   }
 
@@ -1234,6 +1443,9 @@ document.addEventListener('DOMContentLoaded', () => {
     .catch(() => {
       console.log('Ready for user photo upload');
     });
+
+  // Initial Crop UI state sync
+  syncCropUI();
 
   /* ------------------------------------------------------------------
    * Force Cache Clear & App Update (One-Tap PWA Refresher)

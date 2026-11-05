@@ -30,6 +30,8 @@ class FrameRenderer {
       shadowBlur: 24,
       textShadow: false,
       aspectRatio: 'original',
+      cropPositionX: 50,
+      cropPositionY: 50,
       brandLogo: 'auto',
       items: {
         camera: true,
@@ -50,14 +52,16 @@ class FrameRenderer {
 
     const {
       preset,
-      aspectRatio
+      aspectRatio,
+      cropPositionX,
+      cropPositionY
     } = opts;
 
     const imgW = image.naturalWidth || image.width;
     const imgH = image.naturalHeight || image.height;
 
     // Determine target crop/fit for photo if aspect ratio is forced
-    const targetCrop = this.calculateCrop(imgW, imgH, aspectRatio);
+    const targetCrop = this.calculateCrop(imgW, imgH, aspectRatio, cropPositionX, cropPositionY);
     const croppedW = targetCrop.w;
     const croppedH = targetCrop.h;
 
@@ -862,7 +866,7 @@ class FrameRenderer {
     ctx.restore();
   }
 
-  calculateCrop(imgW, imgH, ratio) {
+  calculateCrop(imgW, imgH, ratio, cropPositionX = 50, cropPositionY = 50) {
     if (!ratio || ratio === 'original') {
       return { x: 0, y: 0, w: imgW, h: imgH };
     }
@@ -880,14 +884,20 @@ class FrameRenderer {
     let cropX = 0;
     let cropY = 0;
 
+    // Normalize positions: accepts 0..100 or 0..1, fallback to 0.5 (center)
+    const normX = cropPositionX > 1 ? cropPositionX / 100 : (cropPositionX !== undefined ? cropPositionX : 0.5);
+    const normY = cropPositionY > 1 ? cropPositionY / 100 : (cropPositionY !== undefined ? cropPositionY : 0.5);
+    const clampedX = Math.max(0, Math.min(1, typeof normX === 'number' && !isNaN(normX) ? normX : 0.5));
+    const clampedY = Math.max(0, Math.min(1, typeof normY === 'number' && !isNaN(normY) ? normY : 0.5));
+
     if (currentRatio > targetRatio) {
-      // Image is wider than target
+      // Image is wider than target -> horizontal overflow
       cropW = Math.round(imgH * targetRatio);
-      cropX = Math.round((imgW - cropW) / 2);
+      cropX = Math.round((imgW - cropW) * clampedX);
     } else {
-      // Image is taller than target
+      // Image is taller than target -> vertical overflow
       cropH = Math.round(imgW / targetRatio);
-      cropY = Math.round((imgH - cropH) / 2);
+      cropY = Math.round((imgH - cropH) * clampedY);
     }
 
     return { x: cropX, y: cropY, w: cropW, h: cropH };

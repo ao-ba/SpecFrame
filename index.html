@@ -28,7 +28,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Cinzel:wght@600;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&family=Montserrat:wght@500;600;700&family=Playfair+Display:ital,wght@0,600;1,700&family=Shippori+Mincho:wght@500;700&family=Space+Grotesk:wght@500;700&family=VT323&display=swap" rel="stylesheet">
 
   <!-- App Stylesheet -->
-  <link rel="stylesheet" href="./css/style.css?v=1.8.0">
+  <link rel="stylesheet" href="./css/style.css?v=1.9.0">
 </head>
 <body>
   <!-- PWA Update Notification Toast Banner -->
@@ -115,7 +115,7 @@
         </div>
 
         <div class="empty-state-footer">
-          <span class="app-version-badge">v1.8.0</span>
+          <span class="app-version-badge">v1.9.0</span>
           <span class="footer-divider">·</span>
           <button type="button" class="btn-refresh-cache" title="キャッシュを消去して最新版を取得">
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
@@ -164,7 +164,7 @@
             <span style="font-size: 0.74rem; color: var(--text-muted);">
               オリジナル解像度出力
             </span>
-            <span class="app-version-badge">v1.8.0</span>
+            <span class="app-version-badge">v1.9.0</span>
           </div>
 
           <div class="stage-bottombar-actions">
@@ -433,6 +433,66 @@
               </select>
             </div>
 
+            <!-- Crop / Image Position Adjustment -->
+            <div class="control-group" id="crop-position-section">
+              <div class="control-label">
+                <span>画像表示位置 (クロップ調整)</span>
+                <span id="crop-status-badge" class="crop-status-badge">オリジナル比率</span>
+              </div>
+
+              <!-- Notice when original ratio -->
+              <div id="crop-notice" class="crop-notice">
+                オリジナル比率では写真全体が表示されます。アスペクト比を変更すると枠内のトリミング位置を自由に調整できます。
+              </div>
+
+              <!-- Controls when ratio is changed -->
+              <div id="crop-controls-wrapper" class="crop-controls-wrapper" style="display: none;">
+                <!-- 3x3 Keypad -->
+                <div class="crop-alignment-container">
+                  <div class="crop-grid-title">クイック位置指定</div>
+                  <div class="crop-align-grid" role="group" aria-label="クロップ基準位置">
+                    <button type="button" class="crop-align-btn" data-x="0" data-y="0" title="左上 (0%, 0%)">↖</button>
+                    <button type="button" class="crop-align-btn" data-x="50" data-y="0" title="上中央 (50%, 0%)">↑</button>
+                    <button type="button" class="crop-align-btn" data-x="100" data-y="0" title="右上 (100%, 0%)">↗</button>
+                    <button type="button" class="crop-align-btn" data-x="0" data-y="50" title="左中央 (0%, 50%)">←</button>
+                    <button type="button" class="crop-align-btn is-active" data-x="50" data-y="50" title="中央 (50%, 50%)">・</button>
+                    <button type="button" class="crop-align-btn" data-x="100" data-y="50" title="右中央 (100%, 50%)">→</button>
+                    <button type="button" class="crop-align-btn" data-x="0" data-y="100" title="左下 (0%, 100%)">↙</button>
+                    <button type="button" class="crop-align-btn" data-x="50" data-y="100" title="下中央 (50%, 100%)">↓</button>
+                    <button type="button" class="crop-align-btn" data-x="100" data-y="100" title="右下 (100%, 100%)">↘</button>
+                  </div>
+                </div>
+
+                <!-- Horizontal X Position -->
+                <div class="crop-axis-group" id="crop-axis-x-group">
+                  <div class="control-sublabel">
+                    <span class="axis-title">水平位置 (横)<span class="axis-hint" id="crop-hint-x"></span></span>
+                    <span id="crop-pos-x-val" class="control-val">中央 (50%)</span>
+                  </div>
+                  <div class="crop-quick-btns">
+                    <button type="button" class="crop-preset-btn" data-axis="x" data-val="0">左</button>
+                    <button type="button" class="crop-preset-btn is-active" data-axis="x" data-val="50">中央</button>
+                    <button type="button" class="crop-preset-btn" data-axis="x" data-val="100">右</button>
+                  </div>
+                  <input type="range" id="crop-pos-x-input" min="0" max="100" step="1" value="50">
+                </div>
+
+                <!-- Vertical Y Position -->
+                <div class="crop-axis-group" id="crop-axis-y-group">
+                  <div class="control-sublabel">
+                    <span class="axis-title">垂直位置 (縦)<span class="axis-hint" id="crop-hint-y"></span></span>
+                    <span id="crop-pos-y-val" class="control-val">中央 (50%)</span>
+                  </div>
+                  <div class="crop-quick-btns">
+                    <button type="button" class="crop-preset-btn" data-axis="y" data-val="0">上</button>
+                    <button type="button" class="crop-preset-btn is-active" data-axis="y" data-val="50">中央</button>
+                    <button type="button" class="crop-preset-btn" data-axis="y" data-val="100">下</button>
+                  </div>
+                  <input type="range" id="crop-pos-y-input" min="0" max="100" step="1" value="50">
+                </div>
+              </div>
+            </div>
+
             <!-- Brand Logo Selection -->
             <div class="control-group">
               <span class="control-label">メーカーロゴ</span>
@@ -624,7 +684,7 @@
                 <div class="other-card-header">
                   <div>
                     <span class="other-app-title">SpecFrame</span>
-                    <span class="app-version-badge">v1.8.0</span>
+                    <span class="app-version-badge">v1.9.0</span>
                   </div>
                   <span class="status-indicator">● 最新版</span>
                 </div>
@@ -683,9 +743,9 @@
 
   <!-- Vendor & Core Scripts -->
   <script src="./vendor/exifr.full.umd.js"></script>
-  <script src="./js/exif-service.js?v=1.8.0"></script>
-  <script src="./js/palette.js?v=1.8.0"></script>
-  <script src="./js/renderer.js?v=1.8.0"></script>
-  <script src="./js/app.js?v=1.8.0"></script>
+  <script src="./js/exif-service.js?v=1.9.0"></script>
+  <script src="./js/palette.js?v=1.9.0"></script>
+  <script src="./js/renderer.js?v=1.9.0"></script>
+  <script src="./js/app.js?v=1.9.0"></script>
 </body>
 </html>
