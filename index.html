@@ -25,10 +25,10 @@
   <!-- Modern Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&family=Playfair+Display:ital,wght@0,600;1,700&family=VT323&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Cinzel:wght@600;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&family=Montserrat:wght@500;600;700&family=Playfair+Display:ital,wght@0,600;1,700&family=Shippori+Mincho:wght@500;700&family=Space+Grotesk:wght@500;700&family=VT323&display=swap" rel="stylesheet">
 
   <!-- App Stylesheet -->
-  <link rel="stylesheet" href="./css/style.css?v=1.6.5">
+  <link rel="stylesheet" href="./css/style.css?v=1.6.6">
 </head>
 <body>
   <!-- PWA Update Notification Toast Banner -->
@@ -115,7 +115,7 @@
         </div>
 
         <div class="empty-state-footer">
-          <span class="app-version-badge">SpecFrame v1.6.5</span>
+          <span class="app-version-badge">SpecFrame v1.6.6</span>
           <span class="footer-divider">•</span>
           <button type="button" class="btn-refresh-cache" title="キャッシュを消去して最新版を取得">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
@@ -165,7 +165,7 @@
             <span style="font-size: 0.8rem; color: var(--text-muted);">
               💡 リアルタイムプレビュー中（ネイティブ高解像度書き出し対応）
             </span>
-            <span class="app-version-badge">v1.6.5</span>
+            <span class="app-version-badge">v1.6.6</span>
           </div>
 
           <div class="stage-bottombar-actions">
@@ -362,9 +362,14 @@
                   <span class="field-label">フォント種類</span>
                   <select id="font-family-select" class="form-select">
                     <option value="sans">モダン・サンセリフ (Inter)</option>
-                    <option value="serif">エレガント・セリフ (Playfair)</option>
-                    <option value="mono">テクニカル等幅 (Mono)</option>
-                    <option value="handwriting">手書き風 (Caveat)</option>
+                    <option value="montserrat">モード・ジオメトリック (Montserrat)</option>
+                    <option value="cormorant">ラグジュアリー・セリフ (Cormorant)</option>
+                    <option value="serif">クラシック・セリフ (Playfair)</option>
+                    <option value="cinzel">シネマ・ローマン碑文 (Cinzel)</option>
+                    <option value="shippori">和モダン上質明朝 (しっぽり明朝)</option>
+                    <option value="grotesk">現代アート・グロテスク (Space Grotesk)</option>
+                    <option value="mono">テクニカル等幅 (JetBrains Mono)</option>
+                    <option value="handwriting">手書きサイン風 (Caveat)</option>
                   </select>
                 </div>
               </div>
@@ -618,7 +623,7 @@
                 <div class="other-card-header">
                   <div>
                     <span class="other-app-title">SpecFrame</span>
-                    <span class="app-version-badge">v1.6.5</span>
+                    <span class="app-version-badge">v1.6.6</span>
                   </div>
                   <span class="status-indicator">● 最新版稼働中</span>
                 </div>
@@ -681,9 +686,9 @@
 
   <!-- Vendor & Core Scripts -->
   <script src="./vendor/exifr.full.umd.js"></script>
-  <script src="./js/exif-service.js?v=1.6.5"></script>
-  <script src="./js/palette.js?v=1.6.5"></script>
-  <script src="./js/renderer.js?v=1.6.5"></script>
-  <script src="./js/app.js?v=1.6.5"></script>
+  <script src="./js/exif-service.js?v=1.6.6"></script>
+  <script src="./js/palette.js?v=1.6.6"></script>
+  <script src="./js/renderer.js?v=1.6.6"></script>
+  <script src="./js/app.js?v=1.6.6"></script>
 </body>
 </html>

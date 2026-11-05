@@ -906,15 +906,28 @@ class FrameRenderer {
 
   getFontFamily(fontKey) {
     switch (fontKey) {
+      case 'montserrat':
+        return "'Montserrat', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
+      case 'cormorant':
+        return "'Cormorant Garamond', 'Shippori Mincho', 'Playfair Display', Georgia, serif";
+      case 'cinzel':
+        return "'Cinzel', 'Playfair Display', 'Shippori Mincho', Georgia, serif";
+      case 'shippori':
+        return "'Shippori Mincho', 'Cormorant Garamond', 'Playfair Display', 'Noto Serif JP', serif";
       case 'serif':
-        return "'Playfair Display', 'Cormorant Garamond', 'Noto Serif JP', Georgia, serif";
+      case 'playfair':
+        return "'Playfair Display', 'Cormorant Garamond', 'Shippori Mincho', Georgia, serif";
+      case 'grotesk':
+        return "'Space Grotesk', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
       case 'mono':
         return "'JetBrains Mono', 'Roboto Mono', Menlo, Consolas, monospace";
       case 'handwriting':
         return "'Caveat', cursive, sans-serif";
+      case 'lcd':
+        return "'VT323', 'Courier New', monospace";
       case 'sans':
       default:
-        return "'Inter', 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
+        return "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Hiragino Sans', sans-serif";
     }
   }
 

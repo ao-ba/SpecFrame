@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ------------------------------------------------------------------
    * Service Worker & PWA Update Notification System
    * ------------------------------------------------------------------ */
-  const APP_VERSION = 'v1.6.5';
+  const APP_VERSION = 'v1.6.6';
   const pwaUpdateToast = document.getElementById('pwa-update-toast');
   const toastUpdateBtn = document.getElementById('toast-update-btn');
   const toastDismissBtn = document.getElementById('toast-dismiss-btn');
@@ -812,6 +812,11 @@ document.addEventListener('DOMContentLoaded', () => {
     fontFamilySelect.addEventListener('change', (e) => {
       state.options.fontFamily = e.target.value;
       renderCanvas();
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(() => {
+          renderCanvas();
+        });
+      }
     });
   }
 
@@ -1199,4 +1204,11 @@ document.addEventListener('DOMContentLoaded', () => {
       forceAppUpdate(btn);
     });
   });
+
+  // Re-render canvas when web fonts are fully loaded
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(() => {
+      if (state.currentImage) renderCanvas();
+    });
+  }
 });
